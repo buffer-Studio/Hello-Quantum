@@ -1,0 +1,14 @@
+# Core API dependencies
+fastapi==0.110.1
+uvicorn==0.25.0
+python-dotenv>=1.0.1
+pydantic>=2.6.4
+
+# Database
+motor==3.3.1
+pymongo==4.5.0
+
+# Development and testing
+pytest>=8.0.0
+black>=24.1.1
+isort>=5.13.2
