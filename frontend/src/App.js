@@ -13,20 +13,20 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white flex items-center justify-center p-8">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-8">
       <div className="max-w-4xl mx-auto text-center">
         {/* Logo and Title */}
-        <div className="mb-8">
+        <div className="mb-12">
           <div className="flex items-center justify-center gap-4 mb-6">
-            <Atom className="h-20 w-20 text-cyan-400 animate-pulse" />
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <Atom className="h-20 w-20 text-primary animate-pulse" />
+            <h1 className="text-6xl font-bold text-primary tracking-tight">
               Hello Quantum
             </h1>
           </div>
-          <p className="text-2xl text-gray-300 mb-4">
+          <p className="text-2xl text-muted-foreground mb-4 font-light">
             Learn Quantum Computing Through Interactive Puzzles
           </p>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Master the fundamentals of quantum mechanics - qubits, superposition, and entanglement -
             through visual and interactive challenges. No equations required!
           </p>
@@ -34,26 +34,26 @@ const Home = () => {
 
         {/* Features */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <Card className="bg-black/40 backdrop-blur border-cyan-500/30 p-6">
-            <Cpu className="h-12 w-12 text-cyan-400 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-cyan-300 mb-2">Real Quantum Logic</h3>
-            <p className="text-gray-400 text-sm">
+          <Card className="bg-card border-border shadow-sm p-6 hover:shadow-md transition-shadow">
+            <Cpu className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-foreground mb-2">Real Quantum Logic</h3>
+            <p className="text-muted-foreground text-sm">
               Authentic quantum state simulator with matrix operations
             </p>
           </Card>
 
-          <Card className="bg-black/40 backdrop-blur border-purple-500/30 p-6">
-            <Zap className="h-12 w-12 text-purple-400 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-purple-300 mb-2">5 Challenging Levels</h3>
-            <p className="text-gray-400 text-sm">
+          <Card className="bg-card border-border shadow-sm p-6 hover:shadow-md transition-shadow">
+            <Zap className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-foreground mb-2">5 Challenging Levels</h3>
+            <p className="text-muted-foreground text-sm">
               Progressive difficulty from basic gates to complex entanglement
             </p>
           </Card>
 
-          <Card className="bg-black/40 backdrop-blur border-pink-500/30 p-6">
-            <Atom className="h-12 w-12 text-pink-400 mx-auto mb-4" />
-            <h3 className="text-lg font-bold text-pink-300 mb-2">Visual Learning</h3>
-            <p className="text-gray-400 text-sm">
+          <Card className="bg-card border-border shadow-sm p-6 hover:shadow-md transition-shadow">
+            <Atom className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h3 className="text-lg font-bold text-foreground mb-2">Visual Learning</h3>
+            <p className="text-muted-foreground text-sm">
               Intuitive visualization of quantum states and operations
             </p>
           </Card>
@@ -62,7 +62,8 @@ const Home = () => {
         {/* CTA */}
         <Button
           onClick={() => navigate('/levels')}
-          className="bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white px-8 py-6 text-xl font-bold rounded-lg shadow-lg hover:shadow-cyan-500/50 transition-all duration-300 hover:scale-105"
+          size="lg"
+          className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-xl font-bold rounded-lg shadow-md transition-all duration-300 hover:translate-y-[-2px]"
         >
           Start Learning Quantum
         </Button>
