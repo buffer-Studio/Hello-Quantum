@@ -45,12 +45,22 @@ const LevelSelect = () => {
             return (
               <Card
                 key={level.id}
-                className={`bg-black/50 backdrop-blur border-2 transition-all duration-300 hover:scale-105 ${
+                role="button"
+                tabIndex={isUnlocked ? 0 : -1}
+                aria-label={`Select Level ${level.id}: ${level.name}`}
+                aria-disabled={!isUnlocked}
+                className={`bg-black/50 backdrop-blur border-2 transition-all duration-300 hover:scale-105 outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 ${
                   isUnlocked
                     ? 'border-cyan-500/40 hover:border-cyan-400 cursor-pointer'
                     : 'border-gray-700 opacity-50'
                 }`}
                 onClick={() => isUnlocked && navigate(`/game/${level.id}`)}
+                onKeyDown={(e) => {
+                  if (isUnlocked && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    navigate(`/game/${level.id}`);
+                  }
+                }}
               >
                 <div className="p-6">
                   {/* Level Header */}
