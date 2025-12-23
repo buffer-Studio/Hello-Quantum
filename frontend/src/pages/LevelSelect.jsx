@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Cpu, Home } from 'lucide-react';
+import { Play, Cpu, Home, Database, Network, Share2, Lock } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { LEVELS } from '../mock';
@@ -12,89 +12,120 @@ const LevelSelect = () => {
   const unlockedLevels = LEVELS.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white p-8">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground p-8 font-sans">
+      <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Cpu className="h-12 w-12 text-cyan-400" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Quantum Puzzle Game
-            </h1>
-          </div>
-          <p className="text-xl text-gray-300 mb-6">
-            Master quantum computing through interactive puzzles
-          </p>
-          <div className="flex items-center justify-center gap-8 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500" />
-              <span className="text-gray-400">Superposition</span>
+        <div className="flex flex-col items-center justify-center mb-16 space-y-4">
+            <div className="relative">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-50 animate-pulse"></div>
+                <div className="relative bg-black rounded-full p-4 border border-white/10">
+                    <Cpu className="h-16 w-16 text-primary" />
+                </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
-              <span className="text-gray-400">Entanglement</span>
+            <div className="text-center">
+                <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500 font-mono tracking-tighter uppercase mb-2">
+                    Quantum<span className="text-primary">/</span>Sim
+                </h1>
+                <p className="text-xl text-muted-foreground font-light tracking-wide max-w-2xl mx-auto">
+                    Initialize training protocols. Master superposition and entanglement.
+                </p>
             </div>
-          </div>
+
+            <div className="flex items-center gap-8 mt-8 border-t border-white/5 pt-8">
+                 <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">System Online</span>
+                 </div>
+                 <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-secondary" />
+                    <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Neural Link Stable</span>
+                 </div>
+            </div>
         </div>
 
-        {/* Level Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {/* Level Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
           {LEVELS.map((level, idx) => {
             const isUnlocked = idx < unlockedLevels;
+            const isLast = idx === LEVELS.length - 1;
 
             return (
               <Card
                 key={level.id}
-                className={`bg-black/50 backdrop-blur border-2 transition-all duration-300 hover:scale-105 ${
-                  isUnlocked
-                    ? 'border-cyan-500/40 hover:border-cyan-400 cursor-pointer'
-                    : 'border-gray-700 opacity-50'
+                className={`group relative overflow-hidden transition-all duration-500 border-0 bg-transparent ${
+                  isUnlocked ? 'cursor-pointer hover:-translate-y-2' : 'opacity-50 cursor-not-allowed'
                 }`}
                 onClick={() => isUnlocked && navigate(`/game/${level.id}`)}
               >
-                <div className="p-6">
-                  {/* Level Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-mono text-cyan-400 font-semibold">
-                          Level {level.id}
+                {/* Custom Card Styling */}
+                <div className={`absolute inset-0 bg-gradient-to-b from-card to-black border border-white/10 ${
+                    isUnlocked ? 'group-hover:border-primary/50 group-hover:shadow-[0_0_30px_rgba(0,240,255,0.1)]' : ''
+                }`} />
+
+                {/* Decorative Corner lines */}
+                <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-primary/30 group-hover:border-primary transition-colors" />
+                <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-primary/30 group-hover:border-primary transition-colors" />
+
+                <div className="relative p-8 h-full flex flex-col">
+                  {/* Card Header */}
+                  <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <span className="text-xs font-mono text-primary/80 uppercase tracking-widest mb-1 block">
+                            Node 0{level.id}
                         </span>
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                          level.difficulty === 'Easy' ? 'bg-green-600/30 text-green-300' :
-                          level.difficulty === 'Medium' ? 'bg-yellow-600/30 text-yellow-300' :
-                          'bg-red-600/30 text-red-300'
-                        }`}>
-                          {level.difficulty}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-bold text-white mb-2">{level.name}</h3>
+                        <h3 className="text-2xl font-bold text-white group-hover:text-primary transition-colors font-mono uppercase">
+                            {level.name}
+                        </h3>
                     </div>
-                    <Play className="h-8 w-8 text-cyan-400" />
+                    <div className={`p-2 rounded-sm border ${
+                        isUnlocked ? 'bg-primary/10 border-primary/30 text-primary' : 'bg-white/5 border-white/10 text-muted-foreground'
+                    }`}>
+                        {isUnlocked ? <Play className="h-5 w-5 fill-current" /> : <Lock className="h-5 w-5" />}
+                    </div>
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-400 text-sm mb-4">{level.description}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed mb-6 flex-grow border-l-2 border-white/5 pl-4">
+                    {level.description}
+                  </p>
 
-                  {/* Stats */}
-                  <div className="flex items-center justify-between text-xs mb-4">
-                    <div className="flex items-center gap-2">
-                      <Cpu className="h-4 w-4 text-purple-400" />
-                      <span className="text-gray-400">{level.numQubits} qubit{level.numQubits > 1 ? 's' : ''}</span>
-                    </div>
-                    <span className="text-gray-400">Max {level.maxMoves} moves</span>
-                  </div>
+                  {/* Metadata Footer */}
+                  <div className="space-y-4">
+                      {/* Difficulty Meter */}
+                      <div className="flex items-center justify-between text-xs font-mono uppercase tracking-wider">
+                        <span className="text-muted-foreground">Difficulty</span>
+                        <span className={`${
+                            level.difficulty === 'Easy' ? 'text-emerald-500' :
+                            level.difficulty === 'Medium' ? 'text-yellow-500' :
+                            'text-red-500'
+                        }`}>
+                            {level.difficulty}
+                        </span>
+                      </div>
 
-                  {/* Gates */}
-                  <div className="flex flex-wrap gap-2">
-                    {level.availableGates.map((gate) => (
-                      <span
-                        key={gate}
-                        className="px-2 py-1 bg-cyan-900/30 border border-cyan-500/30 rounded text-xs font-mono text-cyan-300"
-                      >
-                        {gate}
-                      </span>
-                    ))}
+                      {/* Technical Stats */}
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="bg-white/5 p-2 rounded flex items-center gap-2 text-muted-foreground">
+                              <Database className="h-3 w-3" />
+                              {level.numQubits} Qubits
+                          </div>
+                          <div className="bg-white/5 p-2 rounded flex items-center gap-2 text-muted-foreground">
+                              <Network className="h-3 w-3" />
+                              {level.availableGates.length} Modules
+                          </div>
+                      </div>
+
+                      {/* Gate Tags */}
+                      <div className="flex flex-wrap gap-1 pt-2">
+                        {level.availableGates.map((gate) => (
+                          <span
+                            key={gate}
+                            className="px-2 py-0.5 bg-black border border-white/10 rounded-sm text-[10px] font-mono text-gray-400 group-hover:border-primary/30 group-hover:text-primary transition-colors"
+                          >
+                            {gate}
+                          </span>
+                        ))}
+                      </div>
                   </div>
                 </div>
               </Card>
@@ -102,16 +133,19 @@ const LevelSelect = () => {
           })}
         </div>
 
-        {/* Navigation */}
-        <div className="text-center">
+        {/* Footer Navigation */}
+        <div className="text-center border-t border-white/10 pt-8">
           <Button
             onClick={() => navigate('/')}
-            variant="outline"
-            className="bg-cyan-900/20 hover:bg-cyan-900/40 border-cyan-400/30 text-cyan-300"
+            variant="ghost"
+            className="text-muted-foreground hover:text-white hover:bg-white/5 uppercase tracking-widest text-xs"
           >
             <Home className="mr-2 h-4 w-4" />
-            Back to Home
+            Terminate Session
           </Button>
+          <p className="mt-8 text-[10px] text-gray-600 font-mono uppercase">
+            System v2.0.77 // Corp_Net_Access_Granted
+          </p>
         </div>
       </div>
     </div>
