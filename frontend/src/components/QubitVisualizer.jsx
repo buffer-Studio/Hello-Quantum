@@ -1,7 +1,7 @@
 import React from 'react';
+import { GitBranch } from 'lucide-react';
 
 const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTarget = false }) => {
-  // Calculate individual qubit states
   const getQubitProbabilities = (qubitIndex) => {
     const dim = Math.pow(2, numQubits);
     let prob0 = 0;
@@ -21,7 +21,6 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
     return { prob0, prob1 };
   };
 
-  // Check if qubits are entangled
   const checkEntanglement = () => {
     if (numQubits < 2) return [];
     const entangled = [];
@@ -38,7 +37,7 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
   const entanglementPairs = checkEntanglement();
 
   return (
-    <div className="relative">
+    <div className="relative py-2">
       <div className="flex flex-col gap-6">
         {Array.from({ length: numQubits }).map((_, idx) => {
           const { prob0, prob1 } = getQubitProbabilities(idx);
@@ -48,76 +47,73 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
           return (
             <div key={idx} className="relative group">
 
-              {/* Connection Line (Entanglement Visual) */}
+              {/* Entanglement Line */}
               {idx < numQubits - 1 && entanglementPairs.some(p => p[0] === idx && p[1] === idx + 1) && (
-                  <div className="absolute left-10 top-20 bottom-0 w-0.5 h-12 bg-gradient-to-b from-purple-500 to-transparent z-0 opacity-50 animate-pulse" />
+                  <div className="absolute left-[3.25rem] top-16 bottom-[-1.5rem] w-1 bg-gradient-to-b from-purple-500/50 via-pink-500/50 to-purple-500/50 z-0 animate-pulse rounded-full blur-[1px]" />
               )}
 
-              <div className="flex items-center gap-6">
-                {/* Qubit Label */}
-                <div className="flex flex-col items-center gap-1 w-8">
-                    <span className={`text-xs font-mono font-bold uppercase ${
-                    isTarget ? 'text-accent' : 'text-primary'
-                    }`}>
-                    Q{idx}
-                    </span>
-                    <div className={`w-px h-12 bg-gradient-to-b ${
-                        isTarget ? 'from-accent/50' : 'from-primary/50'
-                    } to-transparent`} />
-                </div>
+              <div className="flex items-center gap-6 bg-white/[0.02] p-4 rounded-2xl border border-white/5 hover:bg-white/[0.04] transition-colors duration-300">
 
-                {/* Main Qubit Orb */}
+                {/* Qubit Orb */}
                 <div
                   onClick={() => onQubitSelect && onQubitSelect(idx)}
-                  className={`relative w-20 h-20 rounded-full transition-all duration-300 z-10 ${
+                  className={`relative w-20 h-20 flex-shrink-0 transition-all duration-300 z-10 ${
                     onQubitSelect ? 'cursor-pointer hover:scale-105' : ''
                   }`}
                 >
-                  {/* Outer Ring */}
-                  <div className={`absolute inset-0 rounded-full border-2 ${
-                      isSelected ? 'border-accent shadow-[0_0_20px_rgba(252,238,10,0.5)]' : 'border-white/10'
-                  } transition-all duration-300`} />
+                    {/* Glow Container */}
+                    <div className={`absolute inset-0 rounded-full blur-xl opacity-40 transition-colors duration-500 ${
+                         inSuperposition ? 'bg-purple-500' : prob0 > 0.9 ? 'bg-cyan-500' : 'bg-pink-500'
+                    }`} />
 
-                  {/* Inner Rotating Ring */}
-                  {inSuperposition && (
-                    <div className="absolute inset-1 rounded-full border border-purple-500/50 border-t-transparent animate-spin-slow" />
-                  )}
-
-                  {/* Core Visual */}
-                  <div className="absolute inset-2 rounded-full overflow-hidden flex items-center justify-center bg-black">
-                     {/* Background Gradient based on state */}
+                  {/* Main Orb */}
+                  <div className={`relative w-full h-full rounded-full border-2 overflow-hidden backdrop-blur-md flex items-center justify-center shadow-inner transition-all duration-300 ${
+                       isSelected ? 'border-accent ring-2 ring-accent/30 scale-105' : 'border-white/20'
+                  }`}
+                  style={{
+                      background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.4) 100%)`
+                  }}
+                  >
+                     {/* Dynamic Fluid Background */}
                      <div
-                        className="absolute inset-0 transition-opacity duration-500"
+                        className="absolute inset-0 transition-all duration-700 opacity-80 mix-blend-screen"
                         style={{
-                            background: `radial-gradient(circle at center,
-                                ${prob0 > 0.9 ? 'rgba(6,182,212,0.8)' : prob1 > 0.9 ? 'rgba(168,85,247,0.8)' : 'rgba(255,255,255,0.1)'} 0%,
-                                transparent 70%)`
+                            background: inSuperposition
+                                ? 'conic-gradient(from 0deg, #06b6d4, #d946ef, #06b6d4)'
+                                : prob0 > 0.9
+                                    ? 'radial-gradient(circle, #06b6d4 0%, transparent 70%)'
+                                    : 'radial-gradient(circle, #d946ef 0%, transparent 70%)'
                         }}
                      />
 
-                     {/* Superposition Dual-Color Fog */}
-                     {inSuperposition && (
-                         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/30 to-purple-500/30 blur-md" />
-                     )}
+                     {inSuperposition && <div className="absolute inset-0 animate-spin-slow opacity-50 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay" />}
 
                      {/* Text State */}
-                     <span className="relative z-20 font-mono font-bold text-xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                     <span className="relative z-20 font-display font-bold text-2xl text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                         {prob0 > 0.95 ? '|0⟩' : prob1 > 0.95 ? '|1⟩' : '|ψ⟩'}
                      </span>
                   </div>
+
+                  {/* Label Pill */}
+                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-2 py-0.5 bg-black/80 rounded-full border border-white/10 backdrop-blur text-[10px] font-bold font-mono text-muted-foreground uppercase tracking-widest z-20">
+                        q{idx}
+                   </div>
                 </div>
 
-                {/* Data readout bars */}
-                <div className="flex-1 space-y-3 font-mono">
+                {/* Data Bars */}
+                <div className="flex-1 space-y-3 min-w-[120px]">
                   {/* |0> Bar */}
                   <div className="group/bar">
-                    <div className="flex justify-between text-[10px] mb-1 uppercase tracking-wider">
-                      <span className="text-cyan-400">State |0⟩</span>
-                      <span className="text-cyan-400">{(prob0 * 100).toFixed(0)}%</span>
+                    <div className="flex justify-between text-[10px] mb-1.5 uppercase tracking-wider font-bold">
+                      <span className="text-cyan-400 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,0.5)]"></span>
+                        State |0⟩
+                      </span>
+                      <span className="text-white font-mono">{(prob0 * 100).toFixed(0)}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-gray-900 rounded-sm overflow-hidden border border-white/5">
+                    <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/5 p-[1px]">
                       <div
-                        className="h-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all duration-300"
+                        className="h-full rounded-full bg-gradient-to-r from-cyan-600 to-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.3)] transition-all duration-500 ease-out"
                         style={{ width: `${prob0 * 100}%` }}
                       />
                     </div>
@@ -125,13 +121,16 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
 
                    {/* |1> Bar */}
                    <div className="group/bar">
-                    <div className="flex justify-between text-[10px] mb-1 uppercase tracking-wider">
-                      <span className="text-purple-400">State |1⟩</span>
-                      <span className="text-purple-400">{(prob1 * 100).toFixed(0)}%</span>
+                    <div className="flex justify-between text-[10px] mb-1.5 uppercase tracking-wider font-bold">
+                      <span className="text-pink-400 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-pink-400 shadow-[0_0_5px_rgba(232,121,249,0.5)]"></span>
+                        State |1⟩
+                      </span>
+                      <span className="text-white font-mono">{(prob1 * 100).toFixed(0)}%</span>
                     </div>
-                    <div className="h-1.5 w-full bg-gray-900 rounded-sm overflow-hidden border border-white/5">
+                    <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden border border-white/5 p-[1px]">
                       <div
-                        className="h-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.5)] transition-all duration-300"
+                        className="h-full rounded-full bg-gradient-to-r from-pink-600 to-pink-400 shadow-[0_0_10px_rgba(236,72,153,0.3)] transition-all duration-500 ease-out"
                         style={{ width: `${prob1 * 100}%` }}
                       />
                     </div>
@@ -145,20 +144,20 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
 
       {/* Entanglement Status Indicator */}
       {entanglementPairs.length > 0 && (
-        <div className="mt-6 border-t border-white/10 pt-4">
-            <div className="flex items-center gap-2 mb-2">
-                <GitBranch className="h-3 w-3 text-purple-400" />
-                <span className="text-[10px] uppercase font-mono text-purple-400 font-bold tracking-widest">
-                    Quantum Entanglement Detected
+        <div className="mt-4 animate-in slide-in-from-bottom-2 fade-in duration-500">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 backdrop-blur-md">
+                <GitBranch className="h-3.5 w-3.5 text-purple-400" />
+                <span className="text-[10px] uppercase font-bold text-purple-300 tracking-wide">
+                    Entanglement Active
                 </span>
+                <div className="flex gap-1 ml-2">
+                     {entanglementPairs.map(([i, j], idx) => (
+                        <span key={idx} className="text-[10px] font-mono text-purple-200 bg-purple-500/20 px-1.5 rounded">
+                            {i}↔{j}
+                        </span>
+                    ))}
+                </div>
             </div>
-          <div className="flex flex-wrap gap-2">
-            {entanglementPairs.map(([i, j], idx) => (
-              <span key={idx} className="px-2 py-1 bg-purple-500/10 border border-purple-500/30 rounded text-[10px] font-mono text-purple-300">
-                LINK: Q{i} ↔ Q{j}
-              </span>
-            ))}
-          </div>
         </div>
       )}
     </div>

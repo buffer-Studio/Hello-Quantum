@@ -1,72 +1,50 @@
-/* Cyberpunk Grid Background */
+/* Enhanced Grid Background */
 body {
-  background-color: hsl(240, 10%, 4%);
+  background-color: hsl(230, 25%, 5%);
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
+    radial-gradient(circle at 50% 0%, hsl(230, 40%, 15%) 0%, transparent 60%),
+    linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
   background-position: center top;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: hsl(240, 10%, 6%);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: hsl(240, 6%, 20%);
-  border-radius: 4px;
+  background: hsl(230, 20%, 30%);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(180, 100%, 40%);
+  background: hsl(190, 100%, 40%);
 }
 
-/* CRT Scanline Effect (Subtle) */
-.scanline::before {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(18, 16, 16, 0) 50%,
-    rgba(0, 0, 0, 0.1) 50%
-  );
-  background-size: 100% 4px;
-  z-index: 999;
-  pointer-events: none;
-  opacity: 0.3;
+/* Slow Spin Animation */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
-/* Glitch Animation Keyframes */
-@keyframes glitch {
-  0% { transform: translate(0) }
-  20% { transform: translate(-2px, 2px) }
-  40% { transform: translate(-2px, -2px) }
-  60% { transform: translate(2px, 2px) }
-  80% { transform: translate(2px, -2px) }
-  100% { transform: translate(0) }
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
 }
 
-.animate-glitch {
-  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+/* Float Animation */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
 }
 
-/* Typography Overrides */
-h1, h2, h3, h4, h5, h6 {
-  letter-spacing: -0.02em;
-}
-
-.font-tech {
-  font-family: 'Courier New', Courier, monospace;
-  letter-spacing: -0.05em;
+.animate-float {
+    animation: float 6s ease-in-out infinite;
 }

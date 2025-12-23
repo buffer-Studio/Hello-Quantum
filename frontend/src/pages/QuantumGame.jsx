@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Zap, RotateCcw, ArrowLeft, Lightbulb, Trophy, Cpu, Terminal, Shield } from 'lucide-react';
+import { Zap, RotateCcw, ArrowLeft, Lightbulb, Trophy, Cpu, Terminal, Shield, Activity, Radio, Target } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card } from '../components/ui/card';
 import { toast } from '../hooks/use-toast';
@@ -62,11 +62,11 @@ const QuantumGame = () => {
   if (!level) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="p-8 bg-card border-destructive/50 text-center max-w-md w-full">
+        <Card className="p-8 bg-card border-destructive/50 text-center max-w-md w-full rounded-2xl">
           <Shield className="h-16 w-16 text-destructive mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-destructive mb-2 font-mono">ERROR 404</h1>
+          <h1 className="text-3xl font-bold text-destructive mb-2 font-display">ERROR 404</h1>
           <p className="text-muted-foreground mb-6">Level Data Corrupted or Missing.</p>
-          <Button onClick={() => navigate('/levels')} variant="outline" className="w-full border-destructive text-destructive hover:bg-destructive/10">
+          <Button onClick={() => navigate('/levels')} variant="outline" className="w-full rounded-xl border-destructive text-destructive hover:bg-destructive/10">
             Return to Node Select
           </Button>
         </Card>
@@ -75,106 +75,110 @@ const QuantumGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground p-4 lg:p-8 font-sans selection:bg-cyan-500/30">
-      {/* HUD Header */}
-      <div className="max-w-7xl mx-auto mb-8 border-b border-white/10 pb-6">
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => navigate('/levels')}
-              className="h-10 w-10 border-white/20 hover:bg-white/5 hover:text-primary rounded-none"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div>
-              <div className="flex items-center gap-3">
-                <Cpu className="h-6 w-6 text-primary animate-pulse" />
-                <h1 className="text-2xl font-bold tracking-tight text-white font-mono uppercase">
-                  {level.name}
-                </h1>
-                <span className={`px-2 py-0.5 text-[10px] uppercase tracking-wider font-bold border ${
-                  level.difficulty === 'Easy' ? 'border-emerald-500/50 text-emerald-500' :
-                  level.difficulty === 'Medium' ? 'border-yellow-500/50 text-yellow-500' :
-                  'border-red-500/50 text-red-500'
-                }`}>
-                  {level.difficulty} Protocol
-                </span>
-              </div>
-              <p className="text-muted-foreground text-sm mt-1 font-mono pl-9 border-l-2 border-primary/30 ml-1">
-                {level.description}
-              </p>
+    <div className="min-h-screen bg-background text-foreground p-4 lg:p-8 font-sans selection:bg-primary/30">
+      {/* Top Navigation Bar */}
+      <div className="max-w-[1400px] mx-auto mb-8">
+        <div className="flex items-center justify-between bg-card/30 backdrop-blur-md rounded-2xl p-2 border border-white/5 shadow-lg">
+            <div className="flex items-center gap-2">
+                <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/levels')}
+                className="h-12 w-12 rounded-xl text-muted-foreground hover:text-white hover:bg-white/5"
+                >
+                <ArrowLeft className="h-6 w-6" />
+                </Button>
+                <div className="h-8 w-px bg-white/10 mx-2" />
+                <div>
+                    <h1 className="text-lg font-bold tracking-tight text-white font-display uppercase leading-none">
+                        {level.name}
+                    </h1>
+                    <div className="flex items-center gap-2 mt-1">
+                        <span className={`h-2 w-2 rounded-full ${
+                            level.difficulty === 'Easy' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' :
+                            level.difficulty === 'Medium' ? 'bg-yellow-500 shadow-[0_0_8px_rgba(234,179,8,0.5)]' :
+                            'bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]'
+                        }`} />
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-muted-foreground">
+                            {level.difficulty} Protocol
+                        </span>
+                    </div>
+                </div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-4 bg-card/50 px-4 py-2 border border-white/5 rounded-sm">
-            <div className="text-right">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest">Cycles</p>
-              <p className="text-xl font-mono font-bold text-primary tabular-nums">
-                {String(moveCount).padStart(2, '0')}<span className="text-muted-foreground text-sm">/{String(level.maxMoves).padStart(2, '0')}</span>
-              </p>
+            <div className="flex items-center gap-6 px-4">
+                <div className="text-right hidden md:block">
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Operation Cycles</p>
+                    <p className="text-xl font-display font-bold text-primary tabular-nums">
+                        {String(moveCount).padStart(2, '0')}<span className="text-muted-foreground/50 text-sm">/{String(level.maxMoves).padStart(2, '0')}</span>
+                    </p>
+                </div>
+                <div className="h-10 w-24 relative hidden md:block">
+                     <ActivityGraph className="h-full w-full text-primary opacity-50" />
+                </div>
             </div>
-            <ActivityGraph className="h-8 w-16 text-primary opacity-50" />
-          </div>
         </div>
       </div>
 
       {/* Tutorial/Briefing */}
       {showTutorial && (
-        <div className="max-w-7xl mx-auto mb-6">
-          <Card className="bg-primary/5 border-l-4 border-l-primary border-y-0 border-r-0 rounded-none p-6 shadow-[0_0_15px_rgba(0,240,255,0.1)]">
+        <div className="max-w-[1400px] mx-auto mb-6">
+          <div className="bg-gradient-to-r from-primary/10 to-transparent border-l-4 border-primary rounded-r-xl p-6 backdrop-blur-sm">
             <div className="flex items-start gap-4">
-              <Terminal className="h-6 w-6 text-primary mt-1 flex-shrink-0" />
+              <div className="bg-primary/20 p-2 rounded-lg">
+                 <Terminal className="h-5 w-5 text-primary" />
+              </div>
               <div className="flex-1">
-                <h3 className="text-primary font-mono font-bold text-sm uppercase mb-2 tracking-wider"> Mission Briefing</h3>
-                <p className="text-gray-300 font-light leading-relaxed">{level.tutorial}</p>
+                <h3 className="text-primary font-display font-bold text-sm uppercase mb-2 tracking-wider flex items-center gap-2">
+                     Mission Briefing
+                     <span className="h-px flex-1 bg-primary/20" />
+                </h3>
+                <p className="text-gray-300 font-light leading-relaxed max-w-3xl">{level.tutorial}</p>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowTutorial(false)}
-                className="text-primary hover:text-primary hover:bg-primary/10 font-mono text-xs uppercase"
+                className="text-primary hover:text-primary hover:bg-primary/10 font-bold text-xs uppercase rounded-lg"
               >
                 [ Acknowledge ]
               </Button>
             </div>
-          </Card>
+          </div>
         </div>
       )}
 
       {/* Main Interface Grid */}
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 items-start h-[calc(100vh-250px)] min-h-[600px]">
 
         {/* Left: Current State (Monitor) */}
-        <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-2 mb-2 px-2">
-                <div className="h-2 w-2 bg-primary rounded-full animate-pulse" />
-                <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Live Feed</h2>
-            </div>
-          <Card className="bg-card border-white/10 p-0 overflow-hidden rounded-sm relative group">
-            {/* Scanline overlay */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 pointer-events-none bg-[length:100%_4px,6px_100%]" />
-
-            <div className="relative z-10 p-6">
-                <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Zap className="h-4 w-4 text-primary" /> Current State
-                </h2>
-                <span className="text-[10px] font-mono text-primary bg-primary/10 px-2 py-1">MONITORING</span>
+        <div className="lg:col-span-4 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2">
+                    <Radio className="h-4 w-4 text-primary animate-pulse" />
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Live Feed</h2>
                 </div>
+                <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">Active</span>
+            </div>
 
+          <Card className="flex-1 bg-card/50 border-white/5 overflow-hidden rounded-2xl relative group shadow-2xl flex flex-col">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03)_0%,transparent_50%)]" />
+
+            <div className="relative z-10 p-6 flex-1 overflow-y-auto custom-scrollbar">
                 <QubitVisualizer
-                state={currentState}
-                numQubits={level.numQubits}
-                selectedQubit={selectedQubit}
-                onQubitSelect={setSelectedQubit}
+                    state={currentState}
+                    numQubits={level.numQubits}
+                    selectedQubit={selectedQubit}
+                    onQubitSelect={setSelectedQubit}
                 />
             </div>
 
-            <div className="bg-black/80 p-3 border-t border-white/10 font-mono text-xs">
-                <p className="text-muted-foreground mb-1 uppercase text-[10px]">Vector Output</p>
-                <p className="text-primary break-all">
+            <div className="bg-black/40 backdrop-blur p-4 border-t border-white/5 font-mono text-xs">
+                <div className="flex items-center justify-between mb-2">
+                    <p className="text-muted-foreground uppercase text-[10px] font-bold">Vector Output</p>
+                    <Zap className="h-3 w-3 text-yellow-500" />
+                </div>
+                <p className="text-primary break-all leading-relaxed opacity-80">
                     {stateToString(currentState, level.numQubits)}
                 </p>
             </div>
@@ -182,74 +186,78 @@ const QuantumGame = () => {
         </div>
 
         {/* Center: Controls (Console) */}
-        <div className="lg:col-span-4 flex flex-col">
-            <div className="flex items-center gap-2 mb-2 px-2">
-                <div className="h-2 w-2 bg-secondary rounded-full" />
-                <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Command Console</h2>
+        <div className="lg:col-span-4 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2">
+                    <Cpu className="h-4 w-4 text-secondary" />
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Command Console</h2>
+                </div>
             </div>
-          <div className="flex-1">
-            <GatePanel
-                availableGates={level.availableGates}
-                numQubits={level.numQubits}
-                currentState={currentState}
-                onStateChange={(newState) => {
-                setCurrentState(newState);
-                setMoveCount(moveCount + 1);
-                }}
-                selectedQubit={selectedQubit}
-                setSelectedQubit={setSelectedQubit}
-                selectedGate={selectedGate}
-                setSelectedGate={setSelectedGate}
-                disabled={isComplete || moveCount >= level.maxMoves}
-            />
-          </div>
 
-          <div className="mt-6 flex gap-3">
+            <div className="flex-1 mb-4">
+                <GatePanel
+                    availableGates={level.availableGates}
+                    numQubits={level.numQubits}
+                    currentState={currentState}
+                    onStateChange={(newState) => {
+                        setCurrentState(newState);
+                        setMoveCount(moveCount + 1);
+                    }}
+                    selectedQubit={selectedQubit}
+                    setSelectedQubit={setSelectedQubit}
+                    selectedGate={selectedGate}
+                    setSelectedGate={setSelectedGate}
+                    disabled={isComplete || moveCount >= level.maxMoves}
+                />
+            </div>
+
+          <div className="grid grid-cols-2 gap-3">
             <Button
               onClick={handleReset}
               variant="outline"
-              className="flex-1 border-white/10 hover:border-white/30 hover:bg-white/5 uppercase tracking-widest text-xs font-bold h-12"
+              className="border-white/10 hover:border-white/30 hover:bg-white/5 text-muted-foreground hover:text-white uppercase tracking-wider text-xs font-bold h-12 rounded-xl"
             >
               <RotateCcw className="mr-2 h-4 w-4" />
-              System Reset
+              Reset System
             </Button>
             {!showTutorial && (
               <Button
                 onClick={() => setShowTutorial(true)}
                 variant="outline"
-                className="border-primary/30 text-primary hover:bg-primary/10 h-12 w-12"
+                className="border-primary/20 text-primary hover:bg-primary/5 hover:border-primary/50 uppercase tracking-wider text-xs font-bold h-12 rounded-xl"
               >
-                <Lightbulb className="h-5 w-5" />
+                <Lightbulb className="mr-2 h-4 w-4" />
+                Help
               </Button>
             )}
           </div>
         </div>
 
         {/* Right: Target State (Objective) */}
-        <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center gap-2 mb-2 px-2">
-                <div className="h-2 w-2 bg-accent rounded-full" />
-                <h2 className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Objective Data</h2>
-            </div>
-          <Card className="bg-card border-white/10 p-0 overflow-hidden rounded-sm relative opacity-90">
-             <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.25)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] z-0 pointer-events-none bg-[length:100%_4px,6px_100%]" />
-            <div className="relative z-10 p-6">
-                <div className="flex items-center justify-between mb-6 border-b border-white/5 pb-4">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Trophy className="h-4 w-4 text-accent" /> Target Pattern
-                </h2>
-                <span className="text-[10px] font-mono text-accent bg-accent/10 px-2 py-1">LOCKED</span>
+        <div className="lg:col-span-4 h-full flex flex-col">
+            <div className="flex items-center justify-between mb-3 px-1">
+                <div className="flex items-center gap-2">
+                    <Target className="h-4 w-4 text-accent" />
+                    <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Objective Data</h2>
                 </div>
+                <span className="text-[10px] bg-accent/10 text-accent px-2 py-0.5 rounded-full border border-accent/20">Target</span>
+            </div>
 
+          <Card className="flex-1 bg-card/50 border-white/5 overflow-hidden rounded-2xl relative shadow-2xl flex flex-col">
+             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.03)_0%,transparent_50%)]" />
+            <div className="relative z-10 p-6 flex-1 overflow-y-auto custom-scrollbar">
                 <QubitVisualizer
                 state={level.targetState}
                 numQubits={level.numQubits}
                 isTarget={true}
                 />
             </div>
-             <div className="bg-black/80 p-3 border-t border-white/10 font-mono text-xs">
-                <p className="text-muted-foreground mb-1 uppercase text-[10px]">Required Vector</p>
-                <p className="text-accent break-all">
+             <div className="bg-black/40 backdrop-blur p-4 border-t border-white/5 font-mono text-xs">
+                 <div className="flex items-center justify-between mb-2">
+                    <p className="text-muted-foreground uppercase text-[10px] font-bold">Required Vector</p>
+                    <Trophy className="h-3 w-3 text-accent" />
+                </div>
+                <p className="text-accent break-all leading-relaxed opacity-80">
                     {stateToString(level.targetState, level.numQubits)}
                 </p>
             </div>
@@ -257,32 +265,31 @@ const QuantumGame = () => {
         </div>
       </div>
 
-      {/* Completion Modal - Cyberpunk Style */}
+      {/* Completion Modal - Glassmorphism Style */}
       {isComplete && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
           <div className="relative w-full max-w-lg">
-             {/* Glowing border effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary via-secondary to-primary rounded-lg blur opacity-75 animate-pulse"></div>
+             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-secondary to-primary rounded-3xl blur opacity-30 animate-pulse"></div>
 
-            <Card className="relative bg-black border border-white/10 p-8 rounded-lg shadow-2xl">
+            <Card className="relative bg-card/90 border border-white/10 p-8 rounded-3xl shadow-2xl backdrop-blur-xl">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center p-4 rounded-full bg-accent/10 mb-6 border border-accent/20">
+                <div className="inline-flex items-center justify-center p-4 rounded-full bg-accent/10 mb-6 border border-accent/20 shadow-[0_0_30px_rgba(250,204,21,0.2)]">
                     <Trophy className="h-12 w-12 text-accent" />
                 </div>
 
-                <h2 className="text-4xl font-bold text-white mb-2 font-mono tracking-tighter uppercase">
+                <h2 className="text-4xl font-bold text-white mb-2 font-display tracking-tight uppercase">
                     System Override
                 </h2>
-                <div className="h-1 w-32 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-6" />
+                <p className="text-muted-foreground mb-8">Quantum state synchronization achieved.</p>
 
-                <div className="grid grid-cols-2 gap-4 mb-8 text-left max-w-xs mx-auto">
-                    <div className="bg-white/5 p-3 rounded border border-white/10">
-                        <p className="text-[10px] uppercase text-muted-foreground mb-1">Status</p>
-                        <p className="text-emerald-400 font-mono font-bold">SUCCESS</p>
+                <div className="grid grid-cols-2 gap-4 mb-8 text-left max-w-sm mx-auto">
+                    <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <p className="text-[10px] uppercase text-muted-foreground mb-1 font-bold tracking-wider">Status</p>
+                        <p className="text-emerald-400 font-display font-bold text-lg">OPTIMAL</p>
                     </div>
-                    <div className="bg-white/5 p-3 rounded border border-white/10">
-                        <p className="text-[10px] uppercase text-muted-foreground mb-1">Efficiency</p>
-                        <p className="text-white font-mono font-bold">{moveCount}/{level.maxMoves}</p>
+                    <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                        <p className="text-[10px] uppercase text-muted-foreground mb-1 font-bold tracking-wider">Efficiency</p>
+                        <p className="text-white font-display font-bold text-lg">{moveCount} <span className="text-sm text-muted-foreground font-normal">Cycles</span></p>
                     </div>
                 </div>
 
@@ -290,13 +297,13 @@ const QuantumGame = () => {
                   <Button
                     onClick={handleReset}
                     variant="outline"
-                    className="flex-1 border-white/20 text-white hover:bg-white/10 h-12 uppercase tracking-wide text-xs"
+                    className="flex-1 border-white/10 text-white hover:bg-white/5 h-14 uppercase tracking-wide text-xs font-bold rounded-xl"
                   >
-                    Reboot Level
+                    Reboot
                   </Button>
                   <Button
                     onClick={handleNextLevel}
-                    className="flex-1 bg-primary text-black hover:bg-cyan-400 h-12 uppercase tracking-wide text-xs font-bold"
+                    className="flex-1 bg-primary text-black hover:bg-cyan-400 h-14 uppercase tracking-wide text-xs font-bold rounded-xl shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(6,182,212,0.6)] transition-all"
                   >
                     {level.id < 5 ? 'Initialize Next Node' : 'Finalize Session'}
                   </Button>
@@ -313,7 +320,7 @@ const QuantumGame = () => {
 // Simple SVG Waveform component for visual flair
 const ActivityGraph = ({ className }) => (
   <svg className={className} viewBox="0 0 100 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 15H10L15 5L20 25L25 10L30 20L35 15H100" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"/>
+    <path d="M0 15H10L15 5L20 25L25 10L30 20L35 15H45L50 8L55 22L60 15H100" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 

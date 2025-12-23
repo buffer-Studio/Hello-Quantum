@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Zap, GitBranch, RefreshCw, Repeat, Activity, MousePointer2, AlertCircle } from 'lucide-react';
+import { Zap, GitBranch, RefreshCw, Repeat, Activity, MousePointer2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { toast } from '../hooks/use-toast';
@@ -27,16 +27,18 @@ const GatePanel = ({
       color: 'text-cyan-400',
       border: 'border-cyan-500/50',
       bg: 'hover:bg-cyan-500/10',
-      glow: 'shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+      activeBg: 'bg-cyan-500/10',
+      glow: 'shadow-[0_0_20px_rgba(6,182,212,0.3)]'
     },
     X: {
       name: 'Pauli-X',
       icon: RefreshCw,
-      description: 'Bit Flip (NOT)',
+      description: 'Bit Flip',
       color: 'text-blue-400',
       border: 'border-blue-500/50',
       bg: 'hover:bg-blue-500/10',
-      glow: 'shadow-[0_0_15px_rgba(59,130,246,0.3)]'
+      activeBg: 'bg-blue-500/10',
+      glow: 'shadow-[0_0_20px_rgba(59,130,246,0.3)]'
     },
     Z: {
       name: 'Pauli-Z',
@@ -45,7 +47,8 @@ const GatePanel = ({
       color: 'text-purple-400',
       border: 'border-purple-500/50',
       bg: 'hover:bg-purple-500/10',
-      glow: 'shadow-[0_0_15px_rgba(168,85,247,0.3)]'
+      activeBg: 'bg-purple-500/10',
+      glow: 'shadow-[0_0_20px_rgba(168,85,247,0.3)]'
     },
     CNOT: {
       name: 'CNOT',
@@ -54,7 +57,8 @@ const GatePanel = ({
       color: 'text-pink-400',
       border: 'border-pink-500/50',
       bg: 'hover:bg-pink-500/10',
-      glow: 'shadow-[0_0_15px_rgba(236,72,153,0.3)]'
+      activeBg: 'bg-pink-500/10',
+      glow: 'shadow-[0_0_20px_rgba(236,72,153,0.3)]'
     },
     SWAP: {
       name: 'SWAP',
@@ -63,7 +67,8 @@ const GatePanel = ({
       color: 'text-orange-400',
       border: 'border-orange-500/50',
       bg: 'hover:bg-orange-500/10',
-      glow: 'shadow-[0_0_15px_rgba(249,115,22,0.3)]'
+      activeBg: 'bg-orange-500/10',
+      glow: 'shadow-[0_0_20px_rgba(249,115,22,0.3)]'
     }
   };
 
@@ -129,14 +134,7 @@ const GatePanel = ({
   };
 
   return (
-    <Card className="bg-card border-white/10 p-0 overflow-hidden h-full flex flex-col">
-       <div className="bg-black/40 p-3 border-b border-white/10 flex items-center justify-between">
-          <h2 className="text-xs font-mono font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-            <Activity className="h-3 w-3" /> Gate Array
-          </h2>
-          <span className="h-1.5 w-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
-       </div>
-
+    <Card className="bg-card/50 border-white/5 overflow-hidden h-full flex flex-col rounded-2xl shadow-lg backdrop-blur-sm">
       <div className="p-6 flex-1 flex flex-col justify-center">
         {/* Gate Buttons Grid */}
         <div className="grid grid-cols-2 gap-4 mb-6">
@@ -151,82 +149,86 @@ const GatePanel = ({
                 onClick={() => handleGateClick(gate)}
                 disabled={disabled}
                 variant="outline"
-                className={`group relative h-auto py-5 px-4 bg-black/40 border-l-2 transition-all duration-300 ${
+                className={`group relative h-auto py-4 px-4 border transition-all duration-300 rounded-xl overflow-hidden ${
                   isSelected
-                    ? `${info.border} border-l-4 bg-white/5 ${info.glow}`
-                    : `border-white/10 border-l-2 hover:border-l-4 hover:${info.border} ${info.bg}`
+                    ? `${info.border} ${info.activeBg} ${info.glow} scale-105`
+                    : `border-white/10 hover:border-white/20 hover:scale-102 ${info.bg}`
                 }`}
               >
-                <div className="flex flex-col items-start gap-1 w-full">
-                   <div className="flex items-center justify-between w-full mb-1">
-                      <div className="flex items-baseline gap-2">
-                        <span className={`font-mono font-bold text-lg ${isSelected ? info.color : 'text-gray-400 group-hover:text-white'}`}>
-                            {gate}
-                        </span>
-                        <span className="text-[10px] uppercase font-mono text-muted-foreground/70">
-                            {info.name}
-                        </span>
-                      </div>
-                      <Icon className={`h-5 w-5 ${isSelected ? info.color : 'text-gray-600 group-hover:text-white'}`} />
-                   </div>
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground group-hover:text-gray-400">
-                    {info.description}
-                  </span>
-                </div>
+                 {/* Shine Effect */}
+                 <div className={`absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700`} />
 
-                {/* Tech corner accents */}
-                <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="flex flex-col items-start gap-1 w-full relative z-10">
+                   <div className="flex items-center justify-between w-full mb-2">
+                      <div className={`p-2 rounded-lg bg-black/30 border border-white/5 ${isSelected ? info.color : 'text-gray-400 group-hover:text-white'}`}>
+                          <Icon className="h-5 w-5" />
+                      </div>
+                      <span className={`font-display font-bold text-xl ${isSelected ? info.color : 'text-gray-500 group-hover:text-white'}`}>
+                        {gate}
+                      </span>
+                   </div>
+                   <div className="w-full">
+                       <span className="text-xs font-bold uppercase text-white/90 block mb-0.5">
+                            {info.name}
+                       </span>
+                      <span className="text-[10px] uppercase tracking-wide text-muted-foreground group-hover:text-white/70">
+                        {info.description}
+                      </span>
+                   </div>
+                </div>
               </Button>
             );
           })}
         </div>
 
         {/* Dynamic Context Panel (Bottom) */}
-        <div className={`transition-all duration-300 border-t border-white/10 -mx-6 -mb-6 p-6 ${
-            selectedGate ? 'bg-primary/5' : 'bg-black/20'
+        <div className={`transition-all duration-500 border-t border-white/5 -mx-6 -mb-6 p-6 ${
+            selectedGate ? 'bg-gradient-to-b from-primary/5 to-primary/10' : 'bg-black/20'
         }`}>
             {!selectedGate ? (
-                <div className="flex items-center gap-3 text-muted-foreground">
-                    <MousePointer2 className="h-4 w-4" />
-                    <p className="text-xs font-mono uppercase">Select a gate module to initiate operation.</p>
+                <div className="flex flex-col items-center justify-center text-muted-foreground py-2 text-center">
+                    <div className="p-3 rounded-full bg-white/5 mb-2 animate-pulse">
+                         <MousePointer2 className="h-5 w-5 text-white/50" />
+                    </div>
+                    <p className="text-xs font-bold uppercase tracking-wide">Select a gate to begin</p>
                 </div>
             ) : (
-                 <div className="space-y-4">
+                 <div className="space-y-4 animate-in slide-in-from-bottom-2 fade-in duration-300">
                     <div className="flex items-center justify-between">
-                         <p className="text-xs font-mono font-bold text-primary uppercase flex items-center gap-2">
-                             <span className="h-1.5 w-1.5 bg-primary rounded-sm animate-spin" />
-                             {selectedGate === 'CNOT' && cnotControl === null && 'AWAITING CONTROL QUBIT...'}
-                             {selectedGate === 'CNOT' && cnotControl !== null && `CONTROL: Q${cnotControl} >> AWAITING TARGET...`}
-                             {selectedGate === 'SWAP' && swapFirst === null && 'AWAITING QUBIT A...'}
-                             {selectedGate === 'SWAP' && swapFirst !== null && `QUBIT A: Q${swapFirst} >> AWAITING QUBIT B...`}
-                             {!['CNOT', 'SWAP'].includes(selectedGate) && 'AWAITING TARGET QUBIT...'}
+                         <p className="text-xs font-display font-bold text-primary uppercase flex items-center gap-2">
+                             <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                            </span>
+                             {selectedGate === 'CNOT' && cnotControl === null && 'SELECT CONTROL QUBIT'}
+                             {selectedGate === 'CNOT' && cnotControl !== null && `CONTROL: Q${cnotControl} >> SELECT TARGET`}
+                             {selectedGate === 'SWAP' && swapFirst === null && 'SELECT QUBIT A'}
+                             {selectedGate === 'SWAP' && swapFirst !== null && `QUBIT A: Q${swapFirst} >> SELECT QUBIT B`}
+                             {!['CNOT', 'SWAP'].includes(selectedGate) && 'SELECT TARGET QUBIT'}
                          </p>
                          <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => { setSelectedGate(null); setCnotControl(null); setSwapFirst(null); }}
-                            className="h-6 text-[10px] uppercase text-red-400 hover:text-red-300 hover:bg-red-950/30"
+                            className="h-6 text-[10px] uppercase font-bold text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-full px-3"
                          >
                             Cancel
                          </Button>
                     </div>
 
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="flex gap-2 justify-center">
                         {Array.from({ length: numQubits }).map((_, idx) => (
                         <Button
                             key={idx}
                             onClick={() => handleQubitClick(idx)}
                             disabled={disabled}
-                            className={`h-10 font-mono font-bold text-sm relative overflow-hidden transition-all ${
+                            className={`h-12 w-12 rounded-xl font-display font-bold text-lg relative transition-all duration-300 ${
                                 (cnotControl === idx || swapFirst === idx)
-                                    ? 'bg-accent text-black hover:bg-accent border-none ring-2 ring-accent/50'
-                                    : 'bg-black border border-white/20 hover:border-primary hover:text-primary'
+                                    ? 'bg-accent text-black hover:bg-accent ring-2 ring-accent shadow-[0_0_15px_rgba(250,204,21,0.4)] scale-110'
+                                    : 'bg-card border border-white/10 hover:border-primary hover:text-primary hover:scale-105'
                             }`}
                         >
-                             <span className="z-10">q{idx}</span>
-                             {/* Scanline hover effect */}
-                             <div className="absolute inset-0 bg-white/5 translate-y-full hover:translate-y-0 transition-transform duration-300" />
+                             q{idx}
                         </Button>
                         ))}
                     </div>
