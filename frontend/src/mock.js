@@ -73,42 +73,23 @@ export function applySingleQubitGate(state, gate, targetQubit, numQubits) {
 }
 
 // Apply CNOT gate
-export function applyCNOT(state, controlQubit, targetQubit, numQubits) {
-  const dim = Math.pow(2, numQubits);
-  const newState = new Array(dim);
-
-  for (let i = 0; i < dim; i++) {
-    const controlBit = (i >> (numQubits - 1 - controlQubit)) & 1;
-    if (controlBit === 1) {
-      // If control is 1, flip the target bit
-      const targetBitMask = 1 << (numQubits - 1 - targetQubit);
-      const flippedIdx = i ^ targetBitMask;
-      newState[i] = state[flippedIdx];
-    } else {
-      // If control is 0, keep the state unchanged
-      newState[i] = state[i];
-    }
-  }
-
-  return newState;
-}
-
-// Apply SWAP gate
-export function applySWAP(state, qubit1, qubit2, numQubits) {
+export function applyCNOT(state, control, target, numQubits) {
   const dim = Math.pow(2, numQubits);
   const newState = [...state];
 
   for (let i = 0; i < dim; i++) {
-    const bit1 = (i >> (numQubits - 1 - qubit1)) & 1;
-    const bit2 = (i >> (numQubits - 1 - qubit2)) & 1;
+    const controlMask = 1 << (numQubits - 1 - control);
+    const targetMask = 1 << (numQubits - 1 - target);
 
-    if (bit1 !== bit2) {
-      const mask1 = 1 << (numQubits - 1 - qubit1);
-      const mask2 = 1 << (numQubits - 1 - qubit2);
-      const swappedIdx = (i ^ mask1) ^ mask2;
+    if (i & controlMask) {
+      const targetBit = (i & targetMask) ? 1 : 0;
+      const j = targetBit ? (i & ~targetMask) : (i | targetMask);
 
-      if (i < swappedIdx) {
-        [newState[i], newState[swappedIdx]] = [newState[swappedIdx], newState[i]];
+      // Prevent double swapping (only swap when i < j)
+      if (i < j) {
+        const temp = newState[i];
+        newState[i] = newState[j];
+        newState[j] = temp;
       }
     }
   }
@@ -116,77 +97,88 @@ export function applySWAP(state, qubit1, qubit2, numQubits) {
   return newState;
 }
 
-// Check if two states are equal (within tolerance)
-export function statesEqual(state1, state2, tolerance = 0.01) {
-  if (state1.length !== state2.length) return false;
-
-  for (let i = 0; i < state1.length; i++) {
-    const diff = Math.abs(state1[i].magnitude() - state2[i].magnitude());
-    if (diff > tolerance) return false;
-  }
-
-  return true;
-}
-
-// Create initial state |00...0>
-export function createInitialState(numQubits) {
+// Apply SWAP gate
+export function applySWAP(state, q1, q2, numQubits) {
   const dim = Math.pow(2, numQubits);
-  const state = new Array(dim).fill(null).map(() => new Complex(0));
-  state[0] = new Complex(1); // |0...0>
-  return state;
-}
-
-// Convert state to basis states for display
-export function stateToString(state, numQubits) {
-  if (!state || state.length === 0) return '|...⟩';
-
-  const dim = Math.pow(2, numQubits);
-  let result = [];
+  const newState = [...state];
 
   for (let i = 0; i < dim; i++) {
-    if (!state[i]) continue;
-    const amp = state[i].magnitude();
-    if (amp > 0.001) {
-      const basis = i.toString(2).padStart(numQubits, '0');
-      const prob = (amp * amp * 100).toFixed(1);
-      result.push(`|${basis}⟩: ${prob}%`);
+    const mask1 = 1 << (numQubits - 1 - q1);
+    const mask2 = 1 << (numQubits - 1 - q2);
+
+    const bit1 = (i & mask1) ? 1 : 0;
+    const bit2 = (i & mask2) ? 1 : 0;
+
+    if (bit1 !== bit2) {
+      const j = i ^ mask1 ^ mask2;
+      if (i < j) {
+        const temp = newState[i];
+        newState[i] = newState[j];
+        newState[j] = temp;
+      }
     }
   }
 
-  return result.length > 0 ? result.join(' + ') : '|0⟩';
+  return newState;
 }
 
-// Mock levels data
+// Helper to check if two states are equal (considering float precision)
+export function statesEqual(s1, s2) {
+  if (s1.length !== s2.length) return false;
+  return s1.every((val, i) => {
+    const diffReal = Math.abs(val.real - s2[i].real);
+    const diffImag = Math.abs(val.imag - s2[i].imag);
+    return diffReal < 0.001 && diffImag < 0.001;
+  });
+}
+
+// Helper to format state for display
+export function stateToString(state, numQubits) {
+  return state.map((val, i) => {
+    if (val.magnitude() < 0.001) return null;
+    const sign = val.real < 0 ? '-' : '';
+    const mag = val.magnitude();
+    const bitString = i.toString(2).padStart(numQubits, '0');
+
+    let coeff = '';
+    if (Math.abs(mag - 1) < 0.01) coeff = '';
+    else coeff = mag.toFixed(2);
+
+    return `${sign}${coeff}|${bitString}⟩`;
+  }).filter(Boolean).join(' + ');
+}
+
+// Levels Configuration
 export const LEVELS = [
   {
     id: 1,
-    name: "Superposition Basics",
-    description: "Learn about superposition by applying the Hadamard gate",
-    tutorial: "The Hadamard (H) gate creates superposition - a qubit exists in both |0⟩ and |1⟩ states simultaneously. Try applying H to qubit 0!",
+    name: "The First Step",
+    description: "Initialize basic quantum bit rotation",
+    tutorial: "OPERATOR: The Pauli-X gate is your primary bit-flip protocol. Invert the qubit from state |0⟩ to |1⟩ to stabilize the sector initial point.",
     numQubits: 1,
-    initialState: [new Complex(1), new Complex(0)], // |0>
-    targetState: [new Complex(1/Math.sqrt(2)), new Complex(1/Math.sqrt(2))], // |+>
-    availableGates: ['H'],
+    initialState: [new Complex(1), new Complex(0)], // |0⟩
+    targetState: [new Complex(0), new Complex(1)], // |1⟩
+    availableGates: ['X'],
     maxMoves: 1,
-    difficulty: "Easy"
+    difficulty: "Beginner"
   },
   {
     id: 2,
-    name: "Flip and Phase",
-    description: "Master X and Z gates to manipulate qubit states",
-    tutorial: "X gate flips |0⟩↔|1⟩. Z gate adds a phase to |1⟩. Combine H, X, and Z to reach the target!",
+    name: "Entering Superposition",
+    description: "Create and manipulate superposition states",
+    tutorial: "OPERATOR: The Hadamard gate splits the probability stream. Your qubit now pulses in parallel realities. Achieve 50/50 superposition to bypass the interference wall.",
     numQubits: 1,
-    initialState: [new Complex(1), new Complex(0)], // |0>
-    targetState: [new Complex(1/Math.sqrt(2)), new Complex(-1/Math.sqrt(2))], // |->
-    availableGates: ['H', 'X', 'Z'],
+    initialState: [new Complex(1), new Complex(0)], // |0⟩
+    targetState: [new Complex(1/Math.sqrt(2)), new Complex(1/Math.sqrt(2))], // |+⟩
+    availableGates: ['H', 'X'],
     maxMoves: 3,
     difficulty: "Easy"
   },
   {
     id: 3,
     name: "Entanglement Introduction",
-    description: "Create quantum entanglement using CNOT",
-    tutorial: "CNOT creates entanglement! Select control qubit, then target. Start with H on qubit 0, then CNOT(0→1).",
+    description: "Establish quantum entanglement bonds",
+    tutorial: "CHIEF ARCHITECT: CNOT creates entanglement. Select control qubit, then target. Start with an H-gate on qubit 0, then bind them with CNOT(0→1). Forge the Bell state.",
     numQubits: 2,
     initialState: [new Complex(1), new Complex(0), new Complex(0), new Complex(0)], // |00>
     targetState: [new Complex(1/Math.sqrt(2)), new Complex(0), new Complex(0), new Complex(1/Math.sqrt(2))], // |00>+|11> (Bell state)
@@ -197,8 +189,8 @@ export const LEVELS = [
   {
     id: 4,
     name: "Three Qubit Dance",
-    description: "Manipulate three qubits using SWAP and multi-qubit gates",
-    tutorial: "SWAP exchanges qubit states. Use H, X, and SWAP to arrange the target pattern across 3 qubits.",
+    description: "Orchestrate triple-array synchronization",
+    tutorial: "COMMANDER: SWAP exchanges qubit signatures. Use H, X, and SWAP to align the target pattern across all three nodes. Precision is mission-critical.",
     numQubits: 3,
     initialState: [new Complex(1), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0)], // |000>
     targetState: [
@@ -212,8 +204,8 @@ export const LEVELS = [
   {
     id: 5,
     name: "Quantum Master",
-    description: "Complex entangled state puzzle",
-    tutorial: "Use all your quantum knowledge! Create a complex entangled state with precise gate sequences.",
+    description: "High-density entanglement puzzle",
+    tutorial: "CHIEF ARCHITECT: No room for error. Deploy all quantum protocols. Create a complex interleaved state using precise gate sequencing. Achieve the singularity.",
     numQubits: 3,
     initialState: [new Complex(1), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0), new Complex(0)],
     targetState: [

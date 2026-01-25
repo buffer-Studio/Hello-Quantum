@@ -3,6 +3,8 @@
 # IDE and editors
 .idea/
 .vscode/
+scripts
+
 
 # Dependencies
 node_modules/
@@ -45,6 +47,7 @@ dump.rdb
 # System files
 .DS_Store
 *.pem
+.gitignore
 
 # Python
 __pycache__/
@@ -61,9 +64,6 @@ chainlit.md
 # Deployment
 .vercel
 
-# Data and databases
-agenthub/agents/youtube/db
-
 # Archive files and large assets
 **/*.zip
 **/*.tar.gz
@@ -78,3 +78,4 @@ agenthub/agents/youtube/db
 
 # Mobile development
 android-sdk/
+.gitignore

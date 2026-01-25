@@ -6,10 +6,26 @@
 
 ## 📚 Complete Level Guide
 
-### **Level 1: Superposition Basics** ⭐ Easy
-**Goal:** Learn the Hadamard gate and create superposition
+### **Level 1: The First Step** ⭐ Beginner
+**Goal:** Initialize basic quantum bit rotation (Invert |0⟩ to |1⟩)
 
 **Initial State:** `|0⟩` (qubit in definite 0 state)
+**Target State:** `|1⟩` (qubit in definite 1 state)
+
+**Solution:**
+1. Click the **X** gate button
+2. Select qubit **q0**
+3. ✅ Level complete in 1 move!
+
+**What You Learn:**
+- **Pauli-X Gate:** Acts as a quantum "NOT" gate, flipping the state from |0⟩ to |1⟩ and vice versa.
+
+---
+
+### **Level 2: Entering Superposition** ⭐ Easy
+**Goal:** Create and manipulate superposition states
+
+**Initial State:** `|0⟩`
 **Target State:** `|+⟩` (equal superposition of |0⟩ and |1⟩)
 
 **Solution:**
@@ -18,103 +34,64 @@
 3. ✅ Level complete in 1 move!
 
 **What You Learn:**
-- The Hadamard gate creates **superposition** - a quantum state where a qubit exists in both |0⟩ and |1⟩ simultaneously
-- Each state has 50% probability
-- This is fundamentally different from classical bits that are either 0 or 1
-
-**Visual Cue:** Watch the qubit transform from solid cyan (|0⟩) to a cyan-purple gradient (superposition)
-
----
-
-### **Level 2: Flip and Phase** ⭐ Easy
-**Goal:** Master X and Z gates for state manipulation
-
-**Initial State:** `|0⟩`
-**Target State:** `|−⟩` (superposition with negative phase)
-
-**Solution:**
-1. Click **X** gate, select **q0** → transforms |0⟩ to |1⟩
-2. Click **Hadamard (H)** gate, select **q0** → creates superposition from |1⟩
-3. ✅ Level complete in 2 moves!
-
-**Alternative Solution (3 moves):**
-1. **H** on q0 → creates |+⟩
-2. **Z** on q0 → adds phase flip
-3. ✅ Complete!
-
-**What You Learn:**
-- **X gate** (Pauli-X): Flips qubit state (|0⟩↔|1⟩) - quantum equivalent of classical NOT gate
-- **Z gate** (Pauli-Z): Adds a phase flip to the |1⟩ component (invisible classically but crucial for quantum algorithms)
-- **Phase** is a quantum property that affects interference patterns
-
-**Quantum Insight:** The |+⟩ and |−⟩ states look identical when measured, but interfere differently!
+- **Superposition:** The particle exists in a combination of states simultaneously.
+- **Hadamard Gate:** Creates an equal probability superposition from a basis state.
 
 ---
 
 ### **Level 3: Entanglement Introduction** ⭐⭐ Medium
 **Goal:** Create the famous **Bell State** (quantum entanglement)
 
-**Initial State:** `|00⟩` (two independent qubits, both in |0⟩)
-**Target State:** `(|00⟩ + |11⟩)/√2` (entangled Bell state)
+**Initial State:** `|00⟩`
+**Target State:** `(|00⟩ + |11⟩)/√2`
 
 **Solution:**
-1. Click **Hadamard (H)** gate, select **q0** → puts q0 in superposition
-2. Click **CNOT** gate, select **q0** as control → toast notification appears
-3. Select **q1** as target → applies CNOT(0→1)
-4. ✅ Level complete in 2 moves!
+1. **H** on **q0** → creates superposition (|00⟩ + |10⟩)
+2. **CNOT** (Control: **q0**, Target: **q1**) → entangles the qubits
+3. ✅ Level complete in 2 moves!
 
 **What You Learn:**
-- **CNOT** (Controlled-NOT): Flips target qubit ONLY when control qubit is |1⟩
-- **Entanglement**: Creates correlation between qubits - measuring one instantly affects the other
-- The Bell state is the foundation of quantum teleportation and quantum cryptography
-
-**Visual Magic:**
-- After CNOT, you'll see "Entangled Qubits: q0 ⟷ q1" indicator
-- Both qubits show 50/50 superposition, but they're correlated!
-- State vector shows: `|00⟩: 50.0% + |11⟩: 50.0%` (never |01⟩ or |10⟩)
+- **Bell State:** A maximally entangled quantum state where qubits are perfectly correlated.
+- **CNOT:** The fundamental two-qubit gate used to create entanglement.
 
 ---
 
 ### **Level 4: Three Qubit Dance** ⭐⭐ Medium
-**Goal:** Manipulate 3 qubits using SWAP and multi-qubit gates
+**Goal:** Orchestrate triple-array synchronization
 
 **Initial State:** `|000⟩`
 **Target State:** `(|100⟩ + |111⟩)/√2`
 
-**Solution Path 1 (Optimal - 4 moves):**
-1. **X** on q0 → flips to |100⟩
-2. **H** on q0 → creates superposition: (|000⟩ + |100⟩)/√2
-3. **CNOT** control: q0, target: q1 → entangles q0 and q1
-4. **CNOT** control: q0, target: q2 → entangles all three
-5. ✅ Complete in 4 moves!
+**Solution:**
+1. **X** on **q0** → sets first qubit to |1⟩
+2. **H** on **q1** → creates superposition on second qubit
+3. **CNOT** (Control: **q1**, Target: **q2**) → completes the state
+4. ✅ Level complete in 3 moves!
 
 **What You Learn:**
-- **SWAP** gate: Exchanges quantum states between two qubits
-- Multi-qubit entanglement: More than two qubits can be entangled
-- The **GHZ state** (Greenberger-Horne-Zeilinger): A three-qubit entangled state used in quantum computing research
-
-**Challenge:** Can you find an alternative solution using SWAP?
+- **Product States:** How to combine independent qubit states (q0 is |1⟩, q1-q2 are entangled).
+- **Multi-qubit Control:** Managing larger systems by decomposing them into smaller subsystems.
 
 ---
 
 ### **Level 5: Quantum Master** ⭐⭐⭐ Hard
-**Goal:** Create a complex entangled superposition
+**Goal:** Create a high-density entangled superposition
 
 **Initial State:** `|000⟩`
-**Target State:** Complex 3-qubit superposition with specific amplitudes
+**Target State:** `0.5|000⟩ + 0.5|010⟩ + 0.5|101⟩ + 0.5|111⟩`
 
-**Solution Strategy:**
-This level requires careful planning! The target state is:
-```
-0.5|000⟩ + 0.5|010⟩ + 0.5|101⟩ + 0.5|111⟩
-```
+**Solution:**
+1. **H** on **q0**
+2. **H** on **q1**
+3. **CNOT** (Control: **q0**, Target: **q2**)
+4. ✅ Level complete in 3 moves!
 
-**Solution (One Approach - 5 moves):**
-1. **H** on q0 → creates superposition on first qubit
-2. **H** on q1 → creates superposition on second qubit
-3. **CNOT** control: q0, target: q2 → entangles q0 and q2
-4. Review state and adjust as needed
-5. Use additional gates to match exact target amplitudes
+**Analysis:**
+- **q0** controls **q2** (creating 00 and 11 correlation)
+- **q1** is independent in superposition
+- Result is the combination: `(|00⟩_02 + |11⟩_02) ⊗ |+⟩_1`
+
+---
 
 **What You Learn:**
 
