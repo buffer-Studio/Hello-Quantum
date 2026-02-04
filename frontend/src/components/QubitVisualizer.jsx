@@ -104,7 +104,7 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
 
           return (
             <div key={idx} className="relative group min-h-[100px]">
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-3 md:gap-6">
                 {/* Qubit Label & Control */}
                 <div className="flex flex-col items-center gap-2">
                   <span className={`text-[10px] font-mono tracking-tighter uppercase transition-q-snap ${
@@ -116,7 +116,7 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
                   {/* Holographic Qubit Visualizer */}
                   <div
                     onClick={() => onQubitSelect && onQubitSelect(idx)}
-                    className={`relative w-20 h-20 rounded-full transition-q-snap group-hover:scale-105 ${
+                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-full transition-q-snap group-hover:scale-105 ${
                       onQubitSelect ? 'cursor-pointer' : ''
                     } ${
                       isSelected ? 'ring-2 ring-q-flux ring-offset-4 ring-offset-black/50' : 'ring-1 ring-white/10'

@@ -13,9 +13,13 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		fontFamily: {
-  			sans: ['Inter', 'sans-serif'],
+  			sans: ['Space Grotesk', 'sans-serif'],
+  			body: ['Manrope', 'sans-serif'],
   			mono: ['JetBrains Mono', 'monospace'],
-  			orbitron: ['Orbitron', 'sans-serif'],
+  			// Retain branding tokens but map to new fonts
+  			orbitron: ['Rajdhani', 'sans-serif'],
+  			syne: ['Syne', 'sans-serif'],
+  			rajdhani: ['Rajdhani', 'sans-serif'],
   		},
   		colors: {
   			/* Bespoke Quantum Tokens */

@@ -6,7 +6,7 @@ const BootSequence = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
 
   const bootLogs = [
-    "INITIALIZING_QUANTUM_OS_v4.0...",
+    "INITIALIZING_QUANTUM_OS...",
     "ESTABLISHING_NEURAL_LINK...",
     "VERIFYING_ENTANGLEMENT_STATES...",
     "CALIBRATING_HADAMARD_GATES...",
@@ -32,8 +32,8 @@ const BootSequence = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-[100] bg-q-void flex items-center justify-center p-6">
-      <div className="max-w-md w-full glass-morphism-pro p-8 rounded-2xl border-q-flux/20 relative overflow-hidden">
+    <div className="fixed inset-0 z-[100] bg-q-void flex items-center justify-center p-4 md:p-6 overflow-hidden h-[100dvh]">
+      <div className="w-[90%] md:max-w-md glass-morphism-pro p-6 md:p-8 rounded-2xl border-q-flux/20 relative overflow-hidden">
         {/* Decorative corner */}
         <div className="absolute top-0 right-0 p-4 opacity-20">
           <Activity className="h-12 w-12 text-q-flux" />

@@ -35,7 +35,7 @@ const BentoCard = ({ children, className, title, icon: Icon, delay = 0 }) => {
       )}
       style={{ animationDelay: `${delay}ms` }}
     >
-    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-q-flux/20 to-transparent" />
+    <div className="absolute top-0 left-0 w-full h-[1px] bg-white/5" />
     <div className="p-4 flex flex-col h-full">
       {(title || Icon) && (
         <div className="flex items-center gap-2 mb-4">
@@ -148,7 +148,7 @@ const LevelSelect = () => {
   };
 
   return (
-    <GameContainer title="Neural Matrix" subtitle="Sector Selection Protocol v4.0">
+    <GameContainer title="Neural Matrix" subtitle="Sector Selection Protocol">
       <div className="max-w-[1400px] mx-auto grid grid-cols-12 grid-rows-6 gap-4 h-[calc(100vh-160px)] min-h-[600px]">
 
         {/* Left Panel: Profile & Intel */}
@@ -162,7 +162,7 @@ const LevelSelect = () => {
                  </div>
               </div>
               <div>
-                <div className="text-xl font-bold font-orbitron text-white">YUVRAJ</div>
+                <div className="text-xl font-bold font-orbitron text-white">bufferwise</div>
                 <div className="flex items-center gap-2 mt-1">
                   <div className="h-1 w-24 bg-white/5 rounded-full overflow-hidden">
                   <div className="h-full bg-q-flux transition-all duration-1000" style={{ width: `${syncPercentage}%` }} />
@@ -171,16 +171,17 @@ const LevelSelect = () => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              <div className="p-2 glass bg-white/5 rounded-lg border border-white/5">
-                <div className="text-[8px] text-white/30 font-mono">NODES_CLEAR</div>
-                <div className="text-sm font-bold text-white">{totalCompleted.toString().padStart(2, '0')}/{LEVELS.length.toString().padStart(2, '0')}</div>
+              <div className="flex gap-4 mt-6 text-[10px] font-mono text-white/30 uppercase tracking-widest">
+                <div className="flex flex-col">
+                  <span>Progress</span>
+                  <span className="text-white mt-1">{totalCompleted.toString().padStart(2, '0')}/{LEVELS.length.toString().padStart(2, '0')}</span>
+                </div>
+                <div className="w-[1px] h-8 bg-white/10" />
+                <div className="flex flex-col">
+                   <span>XP</span>
+                   <span className="text-q-entangle mt-1">{totalCompleted * 400}</span>
+                </div>
               </div>
-              <div className="p-2 glass bg-white/5 rounded-lg border border-white/5">
-                <div className="text-[8px] text-white/30 font-mono">XP_GAIN</div>
-                <div className="text-sm font-bold text-q-entangle">{totalCompleted * 400}</div>
-              </div>
-            </div>
           </BentoCard>
 
           <BentoCard title="Sector Intelligence" icon={Info} className="flex-1 overflow-hidden flex flex-col">
@@ -258,8 +259,8 @@ const LevelSelect = () => {
             {/* Investigation Grid Background */}
             <div className="absolute inset-0 pointer-events-none opacity-20 bg-q-void/40"
               style={{
-                backgroundImage: 'linear-gradient(rgba(0, 245, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 245, 255, 0.1) 1px, transparent 1px)',
-                backgroundSize: '40px 40px'
+                backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+                backgroundSize: '80px 80px'
               }}
             />
 
@@ -317,7 +318,7 @@ const LevelSelect = () => {
               {/* Scanning Box Ornament (follows hovered level if exists) */}
               <div
                 className={cn(
-                  "absolute pointer-events-none border border-q-flux/40 transition-q-snap z-0",
+                  "absolute pointer-events-none border border-q-flux/20 transition-all duration-700 ease-out z-0 rounded-2xl",
                   hoveredLevelId ? "opacity-100" : "opacity-0"
                 )}
                 style={{
@@ -336,40 +337,7 @@ const LevelSelect = () => {
             </div>
           </BentoCard>
 
-          {/* Bottom Feed: Multi-purpose Bento Card */}
-          <div className="grid grid-cols-12 gap-4 flex-1 h-[200px]">
-             <BentoCard title="System Logs" icon={Terminal} className="col-span-8 flex flex-col">
-                <div className="flex-1 font-mono text-[9px] text-q-flux/60 space-y-1 overflow-hidden">
-                   {logs.map((log, i) => (
-                     <div key={i} className="flex gap-2">
-                        <span className="opacity-20 text-white leading-none">[{new Date().toLocaleTimeString()}]</span>
-                        <span className="leading-none">{log}</span>
-                     </div>
-                   ))}
-                   <div className="flex gap-2 animate-pulse">
-                      <span className="opacity-20 text-white">{'>'}</span>
-                      <div className="w-2 h-3 bg-q-flux/40" />
-                   </div>
-                </div>
-             </BentoCard>
-
-             <BentoCard title="Global Network Load" icon={Activity} className="col-span-4">
-                <div className="h-full flex flex-col justify-center">
-                   <div className="flex items-end gap-1 h-12">
-                      {[40, 60, 30, 80, 50, 90, 40, 70].map((h, i) => (
-                        <div
-                          key={i}
-                          className="flex-1 bg-q-flux/20 rounded-t-sm animate-pulse"
-                          style={{ height: `${h}%`, animationDelay: `${i * 100}ms` }}
-                        />
-                      ))}
-                   </div>
-                   <div className="mt-2 text-[10px] font-mono text-center text-white/40">
-                     CONVERGENCE_FACTOR: 0.882
-                   </div>
-                </div>
-             </BentoCard>
-          </div>
+          {/* Bottom Feed Removed */}
         </div>
       </div>
 

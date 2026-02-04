@@ -3,7 +3,7 @@ import { Cpu, Atom, Shield, Terminal } from 'lucide-react';
 
 const GameContainer = ({ children, title, subtitle }) => {
   return (
-    <div className="min-h-screen relative overflow-hidden bg-q-void text-foreground selection:bg-q-flux/30">
+    <div className="min-h-[100dvh] relative overflow-hidden bg-q-void text-foreground selection:bg-q-flux/30">
       {/* Scanline Overlay */}
       <div className="scan-overlay opacity-20" />
 
@@ -14,7 +14,7 @@ const GameContainer = ({ children, title, subtitle }) => {
       </div>
 
       {/* Main HUD Interface */}
-      <div className="relative z-10 flex flex-col min-h-screen font-sans">
+      <div className="relative z-10 flex flex-col min-h-[100dvh] font-sans">
         {/* Header HUD */}
         <header className="h-16 border-b border-white/5 glass-morphism-pro flex items-center justify-between px-6 sticky top-0">
           <div className="flex items-center gap-4">
@@ -33,20 +33,7 @@ const GameContainer = ({ children, title, subtitle }) => {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-8 font-mono text-[11px] text-q-flux/60">
-            <div className="flex items-center gap-2">
-              <Shield className="h-3 w-3" />
-              <span>SECURE LINK: ACTIVE</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Cpu className="h-3 w-3" />
-              <span>SYSTEM: QUANTUM_OS_v4.0</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Terminal className="h-3 w-3" />
-              <span>LOG: CONNECTED</span>
-            </div>
-          </div>
+{/* Header Widgets Removed: Minimalism */ }
 
           <div className="flex items-center gap-4 p-2 glass-morphism-pro border-white/10 rounded-lg">
              <span className="text-[10px] font-mono text-white/40">DEV_BY:</span>
@@ -61,14 +48,8 @@ const GameContainer = ({ children, title, subtitle }) => {
 
         {/* Footer HUD */}
         <footer className="h-10 border-t border-white/5 glass-morphism-pro flex items-center justify-between px-6 text-[10px] font-mono text-white/30">
-          <div className="flex gap-4">
-            <span>© 2026 HELLO_QUANTUM</span>
-            <span className="text-q-flux/40">|</span>
-            <span>NEURAL_ENGINE_READY</span>
-          </div>
-          <div className="flex gap-4 items-center">
-            <div className="w-2 h-2 rounded-full bg-q-flux animate-pulse shadow-[0_0_10px_#00F5FF]" />
-            <span className="text-q-flux tracking-widest">SYSTEM_STABLE</span>
+          <div className="flex w-full justify-center">
+            <span className="text-q-flux/40 tracking-widest uppercase">bufferwise</span>
           </div>
         </footer>
       </div>

@@ -201,7 +201,7 @@ const GatePanel = ({
                 key={idx}
                 onClick={() => handleQubitClick(idx)}
                 disabled={disabled}
-                className={`h-10 font-mono text-xs font-bold rounded border transition-q-snap ${
+                className={`h-12 font-mono text-xs font-bold rounded border transition-q-snap ${
                   (cnotControl === idx || swapFirst === idx)
                     ? 'bg-q-flux text-black border-q-flux shadow-[0_0_15px_rgba(0,245,255,0.4)]'
                     : 'bg-white/5 text-white/60 border-white/10 hover:border-q-flux/50 hover:text-white'

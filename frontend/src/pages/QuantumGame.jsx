@@ -8,7 +8,6 @@ import { toast } from '../hooks/use-toast';
 import QubitVisualizer from '../components/QubitVisualizer';
 import GatePanel from '../components/GatePanel';
 import GameContainer from '../components/layout/GameContainer';
-import SystemCommandStream from '../components/layout/SystemCommandStream';
 import { LEVELS, statesEqual, stateToString } from '../mock';
 
 const QuantumGame = () => {
@@ -42,10 +41,7 @@ const QuantumGame = () => {
     }
   }, [currentState, level]);
 
-  const dispatchLog = useCallback((message) => {
-    const event = new CustomEvent('system-log', { detail: { message } });
-    window.dispatchEvent(event);
-  }, []);
+
 
   useEffect(() => {
     if (isComplete && level) {
@@ -63,9 +59,8 @@ const QuantumGame = () => {
       };
       localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
 
-      dispatchLog(`[SUCCESS] ARCHITECT_YUVRAJ: Quantum stability achieved. Sector_${level.id} is SECURE.`);
     }
-  }, [isComplete, level, moveCount, dispatchLog]);
+  }, [isComplete, level, moveCount]);
 
   useEffect(() => {
     const handleImpact = (e) => {
@@ -73,12 +68,7 @@ const QuantumGame = () => {
       setImpactInfo({ qubitIndex, gate });
       setIsShaking(true);
 
-      // Dynamic logging based on gate
-      if (gate === 'CNOT') {
-        dispatchLog(`[OK] ARCHITECT_YUVRAJ: Entanglement bond established.`);
-      } else {
-        dispatchLog(`[OK] ARCHITECT_YUVRAJ: Phase-shift successful on q${qubitIndex}.`);
-      }
+
 
       setTimeout(() => setImpactInfo(null), 800);
       setTimeout(() => setIsShaking(false), 300);
@@ -86,7 +76,7 @@ const QuantumGame = () => {
 
     window.addEventListener('quantum-impact', handleImpact);
     return () => window.removeEventListener('quantum-impact', handleImpact);
-  }, [dispatchLog]);
+  }, []);
 
   const handleReset = () => {
     setCurrentState([...level.initialState]);
@@ -94,7 +84,8 @@ const QuantumGame = () => {
     setIsComplete(false);
     setSelectedQubit(null);
     setSelectedGate(null);
-    dispatchLog("[OK] ARCHITECT_YUVRAJ: Manual flush initiated. Cache cleared.");
+    setSelectedQubit(null);
+    setSelectedGate(null);
   };
 
   const handleNextLevel = () => {
@@ -127,33 +118,11 @@ const QuantumGame = () => {
       <GameContainer title={level.name} subtitle={`SECTOR_${level.id.toString().padStart(2, '0')} // ${level.difficulty}`}>
 
         {/* PEAK_HUD: Quantum Stability & Metrics */}
-        <div className="max-w-7xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card className="glass-morphism-pro p-4 border-white/5 flex items-center gap-6 overflow-hidden relative group">
-             {/* Radial Progress Gauge */}
-             <div className="relative w-20 h-20 shrink-0">
-               <svg className="w-full h-full transform -rotate-90">
-                 <circle
-                   cx="40" cy="40" r="34"
-                   stroke="currentColor" strokeWidth="4"
-                   fill="transparent"
-                   className="text-white/5"
-                 />
-                 <circle
-                   cx="40" cy="40" r="34"
-                   stroke="currentColor" strokeWidth="4"
-                   fill="transparent"
-                   strokeDasharray={213}
-                   strokeDashoffset={213 * (1 - stabilityPercentage / 100)}
-                   className={`${stabilityPercentage > 20 ? 'text-q-flux' : 'text-q-rose'} transition-all duration-1000 ease-out`}
-                   strokeLinecap="round"
-                 />
-               </svg>
-               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                 <span className="text-lg font-orbitron font-bold text-white leading-none">
-                    {Math.round(stabilityPercentage)}
-                 </span>
-                 <span className="text-[6px] font-mono text-white/30 tracking-tighter uppercase">Stability</span>
-               </div>
+        <div className="max-w-7xl mx-auto mb-6 md:mb-12 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+          <Card className="col-span-2 md:col-span-1 glass-morphism-pro p-4 border-white/5 flex items-center gap-6 overflow-hidden relative group">
+             {/* 2D Stability Indicator Replacement */}
+             <div className="relative w-24 h-24 shrink-0 flex items-center justify-center bg-white/5 rounded-full border border-white/10">
+               <Zap className={`h-10 w-10 ${stabilityPercentage > 50 ? 'text-q-flux' : 'text-q-rose'} animate-pulse`} />
              </div>
 
              <div className="flex-1 space-y-1">
@@ -200,14 +169,7 @@ const QuantumGame = () => {
              </div>
           </Card>
 
-          <Card className="hidden md:flex glass-morphism-pro p-4 border-white/5 flex-col justify-center">
-             <span className="text-[9px] font-mono text-white/30 uppercase tracking-[0.2em] mb-1">Active_Protocol</span>
-             <span className="text-lg font-bold text-white font-orbitron tracking-tighter uppercase truncate">RECONFIG_ALPHA_7</span>
-             <div className="flex items-center gap-1 mt-2 text-[8px] font-mono text-q-flux/40">
-                <div className="w-1 h-1 rounded-full bg-q-flux animate-pulse" />
-                TRANSMITTING_SYSTEM_CMDS
-             </div>
-          </Card>
+{/* Active Protocol Card Removed */}
         </div>
 
         {/* Tutorial Overlay */}
@@ -255,8 +217,10 @@ const QuantumGame = () => {
               style={{
                 top: `${(impactInfo.qubitIndex * 120 + 250)}px`,
                 left: '20%',
-                width: '400px',
-                height: '400px'
+                width: '80vw',
+                height: '80vw',
+                maxWidth: '400px',
+                maxHeight: '400px'
               }}
             />
           )}
@@ -338,7 +302,7 @@ const QuantumGame = () => {
                <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-3">
                   <Target className="h-4 w-4 text-q-entangle" />
-                  <h2 className="text-[10px] font-orbitron font-bold text-white uppercase tracking-[0.3em]">Target_Blueprint</h2>
+                  <h2 className="text-[10px] font-orbitron font-bold text-white uppercase tracking-[0.3em]">Target</h2>
                 </div>
               </div>
 
@@ -495,7 +459,7 @@ const QuantumGame = () => {
 
                   <div className="grid grid-cols-2 gap-4 mb-10">
                      <div className="p-6 glass-morphism-pro border-white/5 rounded-2xl text-center">
-                        <span className="block text-[10px] font-mono text-white/20 uppercase mb-2">Architect_Rating</span>
+                        <span className="block text-[10px] font-mono text-white/20 uppercase mb-2">Rating</span>
                         <span className="text-2xl font-orbitron font-bold text-q-rose tracking-widest"> F_RANK </span>
                      </div>
                      <div className="p-6 glass-morphism-pro border-white/5 rounded-2xl text-center">
