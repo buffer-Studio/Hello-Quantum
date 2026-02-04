@@ -27,7 +27,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] relative overflow-hidden bg-q-void text-white selection:bg-q-flux/30">
+    <div className="min-h-[100dvh] relative overflow-x-hidden bg-q-void text-white selection:bg-q-flux/30">
       {/* Interactive Nebula Backdrop */}
       {/* Interactive Nebula Backdrop */}
 
@@ -82,7 +82,7 @@ const Home = () => {
             </div>
 
             {/* Right Column: 3D Qubit Replacement */}
-            <div className="relative order-1 lg:order-2 flex justify-center items-center h-[400px] md:h-[600px] w-full">
+            <div className="relative order-1 lg:order-2 flex justify-center items-center h-[300px] md:h-[600px] w-full">
               <div className="absolute inset-0 bg-q-flux/5 blur-[120px] rounded-full animate-quantum-pulse" />
               <div className="relative w-64 h-64 border border-q-flux/20 rounded-full flex items-center justify-center animate-spin-slow">
                  <div className="absolute inset-0 border border-q-flux/10 rounded-full scale-150" />

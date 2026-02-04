@@ -149,7 +149,7 @@ const LevelSelect = () => {
 
   return (
     <GameContainer title="Neural Matrix" subtitle="Sector Selection Protocol">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-12 grid-rows-6 gap-4 h-[calc(100vh-160px)] min-h-[600px]">
+      <div className="max-w-[1400px] mx-auto flex flex-col lg:grid lg:grid-cols-12 lg:grid-rows-6 gap-4 h-auto lg:h-[calc(100vh-160px)] min-h-[600px] pb-24 lg:pb-0">
 
         {/* Left Panel: Profile & Intel */}
         <div className="col-span-12 lg:col-span-3 row-span-12 flex flex-col gap-4 h-full overflow-hidden">

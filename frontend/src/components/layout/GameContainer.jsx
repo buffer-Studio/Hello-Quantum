@@ -3,7 +3,7 @@ import { Cpu, Atom, Shield, Terminal } from 'lucide-react';
 
 const GameContainer = ({ children, title, subtitle }) => {
   return (
-    <div className="min-h-[100dvh] relative overflow-hidden bg-q-void text-foreground selection:bg-q-flux/30">
+    <div className="min-h-[100dvh] relative overflow-x-hidden bg-q-void text-foreground selection:bg-q-flux/30">
       {/* Scanline Overlay */}
       <div className="scan-overlay opacity-20" />
 
