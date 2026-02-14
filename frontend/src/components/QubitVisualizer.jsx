@@ -60,7 +60,7 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
               {/* Qubit Label */}
               <div className="flex items-center gap-4">
                 <span className={`text-sm font-mono ${
-                  isTarget ? 'text-purple-400' : 'text-cyan-400'
+                  isTarget ? 'text-chart-3' : 'text-chart-1'
                 } font-semibold`}>
                   q{idx}
                 </span>
@@ -68,64 +68,50 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
                 {/* Qubit Circle */}
                 <div
                   onClick={() => onQubitSelect && onQubitSelect(idx)}
-                  className={`relative w-24 h-24 rounded-full transition-all duration-300 ${
-                    onQubitSelect ? 'cursor-pointer' : ''
+                  className={`relative w-24 h-24 rounded-full transition-all duration-300 border-2 ${
+                    onQubitSelect ? 'cursor-pointer hover:border-foreground/50' : 'border-border'
                   } ${
-                    isSelected ? 'ring-4 ring-yellow-400 scale-110' : ''
+                    isSelected ? 'ring-4 ring-primary ring-offset-2 scale-110' : ''
                   }`}
                   style={{
                     background: inSuperposition
-                      ? `linear-gradient(135deg,
-                          rgba(0, 212, 255, ${prob0}) 0%,
-                          rgba(139, 92, 246, ${prob1}) 100%)`
+                      ? `linear-gradient(135deg, hsl(var(--chart-1)), hsl(var(--chart-3)))`
                       : prob0 > 0.9
-                      ? 'radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 150, 255, 0.3))'
-                      : 'radial-gradient(circle, rgba(139, 92, 246, 0.8), rgba(120, 70, 220, 0.3))',
-                    boxShadow: inSuperposition
-                      ? '0 0 30px rgba(139, 92, 246, 0.6), inset 0 0 20px rgba(0, 212, 255, 0.3)'
-                      : prob0 > 0.9
-                      ? '0 0 30px rgba(0, 212, 255, 0.8)'
-                      : '0 0 30px rgba(139, 92, 246, 0.8)',
+                      ? 'hsl(var(--chart-1))'
+                      : 'hsl(var(--chart-3))',
+                    opacity: 0.9
                   }}
                 >
                   {/* State Label */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-bold text-xl drop-shadow-lg">
+                    <span className="text-white font-bold text-xl drop-shadow-sm font-mono">
                       {prob0 > 0.95 ? '|0⟩' : prob1 > 0.95 ? '|1⟩' : '|ψ⟩'}
                     </span>
                   </div>
-
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 rounded-full animate-pulse opacity-50"
-                    style={{
-                      background: 'radial-gradient(circle, transparent 60%, currentColor)',
-                      color: inSuperposition ? '#8B5CF6' : prob0 > 0.9 ? '#00D4FF' : '#8B5CF6'
-                    }}
-                  />
                 </div>
 
                 {/* Probability bars */}
                 <div className="flex-1">
                   <div className="mb-2">
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-cyan-300">|0⟩</span>
-                      <span className="text-cyan-300">{(prob0 * 100).toFixed(1)}%</span>
+                      <span className="text-muted-foreground font-mono">|0⟩</span>
+                      <span className="text-muted-foreground font-mono">{(prob0 * 100).toFixed(1)}%</span>
                     </div>
-                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-2 bg-secondary rounded-full overflow-hidden border border-border">
                       <div
-                        className="h-full bg-gradient-to-r from-cyan-500 to-cyan-400 transition-all duration-300"
+                        className="h-full bg-chart-1 transition-all duration-300"
                         style={{ width: `${prob0 * 100}%` }}
                       />
                     </div>
                   </div>
                   <div>
                     <div className="flex justify-between text-xs mb-1">
-                      <span className="text-purple-300">|1⟩</span>
-                      <span className="text-purple-300">{(prob1 * 100).toFixed(1)}%</span>
+                      <span className="text-muted-foreground font-mono">|1⟩</span>
+                      <span className="text-muted-foreground font-mono">{(prob1 * 100).toFixed(1)}%</span>
                     </div>
-                    <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-2 bg-secondary rounded-full overflow-hidden border border-border">
                       <div
-                        className="h-full bg-gradient-to-r from-purple-500 to-purple-400 transition-all duration-300"
+                        className="h-full bg-chart-3 transition-all duration-300"
                         style={{ width: `${prob1 * 100}%` }}
                       />
                     </div>
@@ -139,10 +125,10 @@ const QubitVisualizer = ({ state, numQubits, selectedQubit, onQubitSelect, isTar
 
       {/* Entanglement visualization */}
       {entanglementPairs.length > 0 && (
-        <div className="mt-4 p-3 bg-purple-900/30 rounded border border-purple-500/30">
-          <p className="text-xs text-purple-300 font-semibold mb-1">Entangled Qubits:</p>
+        <div className="mt-4 p-3 bg-secondary/50 rounded border border-chart-4/30">
+          <p className="text-xs text-chart-4 font-semibold mb-1">Entangled Qubits:</p>
           {entanglementPairs.map(([i, j], idx) => (
-            <p key={idx} className="text-xs text-purple-400">
+            <p key={idx} className="text-xs text-muted-foreground font-mono">
               q{i} ⟷ q{j}
             </p>
           ))}

@@ -12,77 +12,87 @@ const LevelSelect = () => {
   const unlockedLevels = LEVELS.length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white p-8">
+    <div className="min-h-screen bg-background text-foreground p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <Cpu className="h-12 w-12 text-cyan-400" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <Cpu className="h-12 w-12 text-primary" />
+            <h1 className="text-5xl font-bold text-primary tracking-tight">
               Quantum Puzzle Game
             </h1>
           </div>
-          <p className="text-xl text-gray-300 mb-6">
+          <p className="text-xl text-muted-foreground mb-8 font-light">
             Master quantum computing through interactive puzzles
           </p>
           <div className="flex items-center justify-center gap-8 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500" />
-              <span className="text-gray-400">Superposition</span>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-chart-1 to-blue-500" />
+              <span className="text-muted-foreground">Superposition</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500" />
-              <span className="text-gray-400">Entanglement</span>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-chart-3 to-pink-500" />
+              <span className="text-muted-foreground">Entanglement</span>
             </div>
           </div>
         </div>
 
         {/* Level Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {LEVELS.map((level, idx) => {
             const isUnlocked = idx < unlockedLevels;
 
             return (
               <Card
                 key={level.id}
-                className={`bg-black/50 backdrop-blur border-2 transition-all duration-300 hover:scale-105 ${
+                role="button"
+                tabIndex={isUnlocked ? 0 : -1}
+                aria-label={`Select Level ${level.id}: ${level.name}`}
+                aria-disabled={!isUnlocked}
+                className={`bg-card border-border shadow-sm transition-all duration-300 hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                   isUnlocked
-                    ? 'border-cyan-500/40 hover:border-cyan-400 cursor-pointer'
-                    : 'border-gray-700 opacity-50'
+                    ? 'hover:border-primary/50 cursor-pointer'
+                    : 'opacity-60 cursor-not-allowed bg-muted/50'
                 }`}
                 onClick={() => isUnlocked && navigate(`/game/${level.id}`)}
+                onKeyDown={(e) => {
+                  if (isUnlocked && (e.key === 'Enter' || e.key === ' ')) {
+                    e.preventDefault();
+                    navigate(`/game/${level.id}`);
+                  }
+                }}
               >
                 <div className="p-6">
                   {/* Level Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-mono text-cyan-400 font-semibold">
+                        <span className="text-sm font-mono text-primary font-semibold">
                           Level {level.id}
                         </span>
                         <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                          level.difficulty === 'Easy' ? 'bg-green-600/30 text-green-300' :
-                          level.difficulty === 'Medium' ? 'bg-yellow-600/30 text-yellow-300' :
-                          'bg-red-600/30 text-red-300'
+                          level.difficulty === 'Easy' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+                          level.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+                          'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
                         }`}>
                           {level.difficulty}
                         </span>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-2">{level.name}</h3>
+                      <h3 className="text-xl font-bold text-foreground mb-2">{level.name}</h3>
                     </div>
-                    <Play className="h-8 w-8 text-cyan-400" />
+                    <Play className="h-8 w-8 text-primary/80 group-hover:text-primary transition-colors" />
                   </div>
 
                   {/* Description */}
-                  <p className="text-gray-400 text-sm mb-4">{level.description}</p>
+                  <p className="text-muted-foreground text-sm mb-4">{level.description}</p>
 
                   {/* Stats */}
                   <div className="flex items-center justify-between text-xs mb-4">
                     <div className="flex items-center gap-2">
-                      <Cpu className="h-4 w-4 text-purple-400" />
-                      <span className="text-gray-400">{level.numQubits} qubit{level.numQubits > 1 ? 's' : ''}</span>
+                      <Cpu className="h-4 w-4 text-chart-2" />
+                      <span className="text-muted-foreground">{level.numQubits} qubit{level.numQubits > 1 ? 's' : ''}</span>
                     </div>
-                    <span className="text-gray-400">Max {level.maxMoves} moves</span>
+                    <span className="text-muted-foreground">Max {level.maxMoves} moves</span>
                   </div>
 
                   {/* Gates */}
@@ -90,7 +100,7 @@ const LevelSelect = () => {
                     {level.availableGates.map((gate) => (
                       <span
                         key={gate}
-                        className="px-2 py-1 bg-cyan-900/30 border border-cyan-500/30 rounded text-xs font-mono text-cyan-300"
+                        className="px-2 py-1 bg-secondary text-secondary-foreground border border-border rounded text-xs font-mono"
                       >
                         {gate}
                       </span>
@@ -107,7 +117,7 @@ const LevelSelect = () => {
           <Button
             onClick={() => navigate('/')}
             variant="outline"
-            className="bg-cyan-900/20 hover:bg-cyan-900/40 border-cyan-400/30 text-cyan-300"
+            className="border-primary/20 hover:bg-primary/5 text-primary"
           >
             <Home className="mr-2 h-4 w-4" />
             Back to Home

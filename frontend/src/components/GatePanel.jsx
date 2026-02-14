@@ -24,36 +24,31 @@ const GatePanel = ({
       name: 'Hadamard',
       icon: Activity,
       description: 'Creates superposition',
-      color: 'from-cyan-600 to-cyan-500',
-      borderColor: 'border-cyan-400/40'
+      className: 'bg-chart-1 text-white border-chart-1/50 hover:bg-chart-1/90'
     },
     X: {
       name: 'Pauli-X',
       icon: RefreshCw,
       description: 'Flips |0⟩↔|1⟩',
-      color: 'from-blue-600 to-blue-500',
-      borderColor: 'border-blue-400/40'
+      className: 'bg-chart-2 text-white border-chart-2/50 hover:bg-chart-2/90'
     },
     Z: {
       name: 'Pauli-Z',
       icon: Zap,
       description: 'Phase flip',
-      color: 'from-purple-600 to-purple-500',
-      borderColor: 'border-purple-400/40'
+      className: 'bg-chart-3 text-white border-chart-3/50 hover:bg-chart-3/90'
     },
     CNOT: {
       name: 'CNOT',
       icon: GitBranch,
       description: 'Controlled-NOT (entanglement)',
-      color: 'from-pink-600 to-pink-500',
-      borderColor: 'border-pink-400/40'
+      className: 'bg-chart-4 text-white border-chart-4/50 hover:bg-chart-4/90'
     },
     SWAP: {
       name: 'SWAP',
       icon: Repeat,
       description: 'Swaps two qubits',
-      color: 'from-orange-600 to-orange-500',
-      borderColor: 'border-orange-400/40'
+      className: 'bg-chart-5 text-white border-chart-5/50 hover:bg-chart-5/90'
     }
   };
 
@@ -165,9 +160,9 @@ const GatePanel = ({
   };
 
   return (
-    <Card className="bg-black/40 backdrop-blur border-cyan-500/30 p-6">
-      <h2 className="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
-        <Zap className="h-5 w-5" />
+    <Card className="bg-card border-border shadow-sm p-6">
+      <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+        <Zap className="h-5 w-5 text-chart-1" />
         Quantum Gates
       </h2>
 
@@ -183,18 +178,15 @@ const GatePanel = ({
               key={gate}
               onClick={() => handleGateClick(gate)}
               disabled={disabled}
-              className={`relative h-auto py-4 px-4 bg-gradient-to-br ${info.color} border-2 ${
-                isSelected ? 'ring-4 ring-yellow-400 scale-105' : info.borderColor
-              } hover:scale-105 transition-all duration-200 disabled:opacity-50`}
+              className={`relative h-auto py-4 px-4 border ${info.className} ${
+                isSelected ? 'ring-2 ring-foreground scale-105' : ''
+              } shadow-sm transition-all duration-200 disabled:opacity-50`}
             >
-              <div className="flex flex-col items-center gap-2 text-white">
+              <div className="flex flex-col items-center gap-2">
                 <Icon className="h-6 w-6" />
                 <span className="font-bold text-sm">{info.name}</span>
-                <span className="text-xs opacity-80">{info.description}</span>
+                <span className="text-xs opacity-90">{info.description}</span>
               </div>
-              {isSelected && (
-                <div className="absolute inset-0 rounded animate-pulse bg-yellow-400/20" />
-              )}
             </Button>
           );
         })}
@@ -202,8 +194,8 @@ const GatePanel = ({
 
       {/* Qubit Selection */}
       {selectedGate && (
-        <Card className="bg-gradient-to-br from-cyan-900/40 to-purple-900/40 border-cyan-400/30 p-4">
-          <p className="text-cyan-300 text-sm font-semibold mb-3">
+        <Card className="bg-secondary/20 border-border p-4 mb-4">
+          <p className="text-foreground text-sm font-semibold mb-3">
             {selectedGate === 'CNOT' && cnotControl === null && 'Select control qubit:'}
             {selectedGate === 'CNOT' && cnotControl !== null && `Control: q${cnotControl} - Select target:`}
             {selectedGate === 'SWAP' && swapFirst === null && 'Select first qubit:'}
@@ -218,8 +210,8 @@ const GatePanel = ({
                 disabled={disabled}
                 className={`h-12 font-mono font-bold ${
                   (cnotControl === idx || swapFirst === idx)
-                    ? 'bg-yellow-600 hover:bg-yellow-700 ring-2 ring-yellow-400'
-                    : 'bg-cyan-700 hover:bg-cyan-600'
+                    ? 'bg-accent text-accent-foreground ring-2 ring-primary'
+                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
                 }`}
               >
                 q{idx}
@@ -234,7 +226,7 @@ const GatePanel = ({
               setCnotControl(null);
               setSwapFirst(null);
             }}
-            className="mt-3 w-full border-cyan-400/30 text-cyan-300 hover:bg-cyan-900/20"
+            className="mt-3 w-full"
           >
             Cancel
           </Button>
@@ -242,14 +234,14 @@ const GatePanel = ({
       )}
 
       {/* Quick reference */}
-      <div className="mt-4 p-3 bg-gray-800/50 rounded border border-gray-700">
-        <p className="text-xs text-gray-400 font-semibold mb-2">Quick Reference:</p>
-        <ul className="text-xs text-gray-400 space-y-1">
-          <li>• <span className="text-cyan-300">H</span>: |0⟩ → |+⟩ (superposition)</li>
-          <li>• <span className="text-blue-300">X</span>: |0⟩ → |1⟩ (bit flip)</li>
-          <li>• <span className="text-purple-300">Z</span>: Phase flip on |1⟩</li>
-          <li>• <span className="text-pink-300">CNOT</span>: Entangles qubits</li>
-          <li>• <span className="text-orange-300">SWAP</span>: Exchanges states</li>
+      <div className="mt-4 p-3 bg-secondary/30 rounded border border-border">
+        <p className="text-xs text-muted-foreground font-semibold mb-2">Quick Reference:</p>
+        <ul className="text-xs text-muted-foreground space-y-1">
+          <li>• <span className="text-chart-1 font-medium">H</span>: |0⟩ → |+⟩ (superposition)</li>
+          <li>• <span className="text-chart-2 font-medium">X</span>: |0⟩ → |1⟩ (bit flip)</li>
+          <li>• <span className="text-chart-3 font-medium">Z</span>: Phase flip on |1⟩</li>
+          <li>• <span className="text-chart-4 font-medium">CNOT</span>: Entangles qubits</li>
+          <li>• <span className="text-chart-5 font-medium">SWAP</span>: Exchanges states</li>
         </ul>
       </div>
     </Card>

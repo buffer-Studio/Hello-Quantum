@@ -60,10 +60,10 @@ const QuantumGame = () => {
 
   if (!level) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
-        <Card className="p-8 bg-black/50 backdrop-blur border-cyan-500/30">
-          <p className="text-cyan-400 text-xl">Level not found</p>
-          <Button onClick={() => navigate('/levels')} className="mt-4 bg-cyan-600 hover:bg-cyan-700">
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Card className="p-8 bg-card border-destructive/30">
+          <p className="text-destructive text-xl">Level not found</p>
+          <Button onClick={() => navigate('/levels')} className="mt-4" variant="outline">
             Back to Levels
           </Button>
         </Card>
@@ -72,56 +72,56 @@ const QuantumGame = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white p-4">
+    <div className="min-h-screen bg-background text-foreground p-4">
       {/* Header */}
       <div className="max-w-7xl mx-auto mb-6">
         <div className="flex items-center justify-between mb-4">
           <Button
             variant="ghost"
             onClick={() => navigate('/levels')}
-            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-900/20"
+            className="text-primary hover:text-primary/80 hover:bg-primary/5"
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Back to Levels
           </Button>
           <div className="flex items-center gap-3">
-            <div className="px-4 py-2 bg-purple-600/30 rounded-lg border border-purple-400/30">
-              <span className="text-purple-300 font-semibold">Moves: {moveCount}/{level.maxMoves}</span>
+            <div className="px-4 py-2 bg-secondary/50 rounded-lg border border-border">
+              <span className="text-secondary-foreground font-semibold">Moves: {moveCount}/{level.maxMoves}</span>
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-3 mb-2">
-          <Cpu className="h-8 w-8 text-cyan-400" />
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+          <Cpu className="h-8 w-8 text-primary" />
+          <h1 className="text-3xl font-bold text-primary tracking-tight">
             {level.name}
           </h1>
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            level.difficulty === 'Easy' ? 'bg-green-600/30 text-green-300' :
-            level.difficulty === 'Medium' ? 'bg-yellow-600/30 text-yellow-300' :
-            'bg-red-600/30 text-red-300'
+            level.difficulty === 'Easy' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
+            level.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+            'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300'
           }`}>
             {level.difficulty}
           </span>
         </div>
-        <p className="text-gray-300 text-lg">{level.description}</p>
+        <p className="text-muted-foreground text-lg">{level.description}</p>
       </div>
 
       {/* Tutorial Card */}
       {showTutorial && (
         <div className="max-w-7xl mx-auto mb-6">
-          <Card className="bg-gradient-to-r from-cyan-900/40 to-blue-900/40 border-cyan-400/30 p-6 backdrop-blur">
+          <Card className="bg-primary/5 border-primary/20 p-6 shadow-sm">
             <div className="flex items-start gap-4">
-              <Lightbulb className="h-6 w-6 text-cyan-400 flex-shrink-0 mt-1" />
+              <Lightbulb className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <h3 className="text-cyan-300 font-semibold text-lg mb-2">Tutorial</h3>
-                <p className="text-gray-300">{level.tutorial}</p>
+                <h3 className="text-primary font-semibold text-lg mb-2">Tutorial</h3>
+                <p className="text-muted-foreground">{level.tutorial}</p>
               </div>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowTutorial(false)}
-                className="text-cyan-400 hover:text-cyan-300"
+                className="text-primary hover:text-primary/80"
               >
                 Got it!
               </Button>
@@ -134,10 +134,10 @@ const QuantumGame = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Current State */}
         <div className="lg:col-span-1">
-          <Card className="bg-black/40 backdrop-blur border-cyan-500/30 p-6">
+          <Card className="bg-card border-border shadow-sm p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Zap className="h-5 w-5 text-cyan-400" />
-              <h2 className="text-xl font-bold text-cyan-400">Current State</h2>
+              <Zap className="h-5 w-5 text-chart-1" />
+              <h2 className="text-xl font-bold text-foreground">Current State</h2>
             </div>
             <QubitVisualizer
               state={currentState}
@@ -145,9 +145,9 @@ const QuantumGame = () => {
               selectedQubit={selectedQubit}
               onQubitSelect={setSelectedQubit}
             />
-            <div className="mt-4 p-3 bg-gray-800/50 rounded border border-gray-700">
-              <p className="text-xs text-gray-400 mb-1">State Vector:</p>
-              <p className="text-sm text-cyan-300 font-mono break-all">
+            <div className="mt-4 p-3 bg-secondary/30 rounded border border-border">
+              <p className="text-xs text-muted-foreground mb-1">State Vector:</p>
+              <p className="text-sm text-foreground font-mono break-all">
                 {stateToString(currentState, level.numQubits)}
               </p>
             </div>
@@ -174,7 +174,8 @@ const QuantumGame = () => {
           <div className="mt-4 flex gap-3">
             <Button
               onClick={handleReset}
-              className="flex-1 bg-purple-600 hover:bg-purple-700 border border-purple-400/30"
+              variant="outline"
+              className="flex-1"
             >
               <RotateCcw className="mr-2 h-4 w-4" />
               Reset
@@ -183,7 +184,7 @@ const QuantumGame = () => {
               <Button
                 onClick={() => setShowTutorial(true)}
                 variant="outline"
-                className="bg-cyan-900/20 hover:bg-cyan-900/40 border-cyan-400/30 text-cyan-300"
+                className="text-primary"
               >
                 <Lightbulb className="h-4 w-4" />
               </Button>
@@ -193,19 +194,19 @@ const QuantumGame = () => {
 
         {/* Right: Target State */}
         <div className="lg:col-span-1">
-          <Card className="bg-black/40 backdrop-blur border-purple-500/30 p-6">
+          <Card className="bg-card border-border shadow-sm p-6">
             <div className="flex items-center gap-2 mb-4">
-              <Trophy className="h-5 w-5 text-purple-400" />
-              <h2 className="text-xl font-bold text-purple-400">Target State</h2>
+              <Trophy className="h-5 w-5 text-chart-3" />
+              <h2 className="text-xl font-bold text-foreground">Target State</h2>
             </div>
             <QubitVisualizer
               state={level.targetState}
               numQubits={level.numQubits}
               isTarget={true}
             />
-            <div className="mt-4 p-3 bg-gray-800/50 rounded border border-gray-700">
-              <p className="text-xs text-gray-400 mb-1">Target Vector:</p>
-              <p className="text-sm text-purple-300 font-mono break-all">
+            <div className="mt-4 p-3 bg-secondary/30 rounded border border-border">
+              <p className="text-xs text-muted-foreground mb-1">Target Vector:</p>
+              <p className="text-sm text-foreground font-mono break-all">
                 {stateToString(level.targetState, level.numQubits)}
               </p>
             </div>
@@ -215,13 +216,13 @@ const QuantumGame = () => {
 
       {/* Completion Modal */}
       {isComplete && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <Card className="bg-gradient-to-br from-purple-900/90 to-cyan-900/90 border-2 border-cyan-400/50 p-8 max-w-md w-full">
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="bg-card border shadow-lg p-8 max-w-md w-full">
             <div className="text-center">
-              <Trophy className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
-              <h2 className="text-3xl font-bold text-cyan-300 mb-2">Level Complete!</h2>
-              <p className="text-gray-300 mb-1">Moves used: {moveCount}/{level.maxMoves}</p>
-              <p className="text-sm text-gray-400 mb-6">
+              <Trophy className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
+              <h2 className="text-3xl font-bold text-foreground mb-2">Level Complete!</h2>
+              <p className="text-muted-foreground mb-1">Moves used: {moveCount}/{level.maxMoves}</p>
+              <p className="text-sm text-muted-foreground mb-6">
                 {moveCount <= level.maxMoves * 0.6 ? '⭐⭐⭐ Perfect!' :
                  moveCount <= level.maxMoves * 0.8 ? '⭐⭐ Great!' : '⭐ Complete!'}
               </p>
@@ -229,13 +230,13 @@ const QuantumGame = () => {
                 <Button
                   onClick={handleReset}
                   variant="outline"
-                  className="flex-1 border-cyan-400/30 text-cyan-300 hover:bg-cyan-900/20"
+                  className="flex-1"
                 >
                   Retry
                 </Button>
                 <Button
                   onClick={handleNextLevel}
-                  className="flex-1 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700"
+                  className="flex-1"
                 >
                   {level.id < 5 ? 'Next Level' : 'Finish'}
                 </Button>
